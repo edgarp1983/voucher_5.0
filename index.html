@@ -22,14 +22,13 @@
             --text-secondary: #374151;
             --border-color: #e2e8f0;
             --primary-color: #4f46e5;
-            --card-bg: #ffffff; /* Mudado para cor sólida */
+            --card-bg: #ffffff;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Melhora a renderização de fontes e bordas no celular */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -38,7 +37,6 @@
             line-height: 1.7;
             color: #374151;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
-            /* FIX CRÍTICO: Mudado para 100dvh e fixed para evitar pulo da barra de endereço */
             min-height: 100dvh;
             background-attachment: fixed;
             font-weight: 400;
@@ -46,768 +44,219 @@
             overflow-x: hidden;
         }
 
-        /* Loading Screen */
         .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #f8fafc; /* Cor sólida */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: #1f2937;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8fafc; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999; color: #1f2937;
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(99, 102, 241, 0.2);
-            border-top: 4px solid #6366f1;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            width: 50px; height: 50px; border: 4px solid rgba(99, 102, 241, 0.2);
+            border-top: 4px solid #6366f1; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 20px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* App Container */
-        .app-container {
-            min-height: 100dvh; /* Fix Vertical */
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow-x: hidden;
-        }
+        .app-container { min-height: 100dvh; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
 
-        /* Header */
-        .app-header {
-            background: #ffffff; /* Sólido */
-            /* Removido backdrop-filter */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transform: translateZ(0); /* Camada GPU */
-        }
+        .app-header { background: #ffffff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; transform: translateZ(0); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .app-header h1 { color: #4f46e5; font-size: 1.875rem; font-weight: 700; }
+        .app-header h1 i { margin-right: 0.5rem; }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .config-btn { background: #4f46e5; color: white; border: none; padding: 0.875rem; border-radius: 16px; cursor: pointer; transition: transform 0.2s ease, background 0.2s ease; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        .config-btn:hover { background: #4338ca; transform: translateY(-2px); }
 
-        .app-header h1 {
-            color: #1f2937;
-            font-size: 1.875rem;
-            font-weight: 700;
-            /* Simplificado para evitar renderização pesada de texto */
-            color: #4f46e5; 
-        }
+        .main-content { flex: 1; padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; position: relative; }
 
-        .app-header h1 i {
-            margin-right: 0.5rem;
-        }
+        .screen { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow: hidden; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .config-btn {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            padding: 0.875rem;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
-        }
+        .screen-header { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; position: relative; }
+        .screen-header h2 { font-size: 1.5rem; font-weight: 600; }
 
-        .config-btn:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-        }
+        .back-btn { background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 0.75rem; border-radius: 50%; cursor: pointer; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-        }
-
-        /* Screen Base Styles - OTIMIZADO */
-        .screen {
-            background: #ffffff; /* Fundo Sólido */
-            border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-            /* Removido backdrop-filter */
-            overflow: hidden;
-            animation: slideIn 0.4s ease-out; /* Animação mais rápida */
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .screen-header {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-            padding: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            position: relative;
-        }
-
-        .screen-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        /* Back Button */
-        .back-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.875rem 1.75rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-            transform: translateZ(0); /* Performance */
-        }
-
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
-        }
+        .btn { padding: 0.875rem 1.75rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease; font-size: 0.875rem; transform: translateZ(0); }
+        .btn-primary { background: #4f46e5; color: white; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
         .btn-primary:hover { background: #4338ca; }
-
-        .btn-secondary {
-            background: #64748b;
-            color: white;
-            box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2);
-        }
+        .btn-secondary { background: #64748b; color: white; box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2); }
         .btn-secondary:hover { background: #475569; }
-
-        .btn-success {
-            background: #10b981;
-            color: white;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-        }
+        .btn-success { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
         .btn-success:hover { background: #059669; }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-        }
+        .btn-danger { background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
         .btn-danger:hover { background: #dc2626; }
-
-        .btn-info {
-            background: #0ea5e9;
-            color: white;
-            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
-        }
+        .btn-info { background: #0ea5e9; color: white; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2); }
         .btn-info:hover { background: #0284c7; }
 
-        /* Seção de navegação */
-        .navigation-section {
-            margin-top: 3rem;
-            padding: 2.5rem;
-            background: #ffffff; /* Sólido */
-            border-radius: 24px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-        }
+        .navigation-section { margin-top: 3rem; padding: 2.5rem; background: #ffffff; border-radius: 24px; border: 1px solid #e2e8f0; text-align: center; }
+        .btn-large { padding: 1rem 2rem; font-size: 1rem; min-width: 200px; }
+        .navigation-help { margin-top: 1.25rem; color: #6b7280; font-size: 0.95rem; }
 
-        .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            min-width: 200px;
-        }
+        .config-form, .voucher-form { padding: 2rem; }
+        .agencies-list-section, .add-agency-section, .form-section { margin-bottom: 2.5rem; padding: 2rem; background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .agencies-list-section h3, .add-agency-section h3, .form-section h3 { color: #1f2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
 
-        .navigation-help {
-            margin-top: 1.25rem;
-            color: #6b7280;
-            font-size: 0.95rem;
-        }
+        .agencies-list { display: grid; gap: 1.5rem; }
+        .agency-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; display: flex; flex-direction: column; }
+        .agency-item-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; width: 100%; }
+        .agency-name { font-weight: 600; font-size: 1.1rem; color: #374151; }
+        .agency-actions { display: flex; gap: 0.5rem; }
+        .btn-small { padding: 0.5rem 1rem; font-size: 0.875rem; border-radius: 8px; }
 
-        /* Forms */
-        .config-form, .voucher-form {
-            padding: 2rem;
-        }
-
-        /* Agencies Management */
-        .agencies-list-section, .add-agency-section, .form-section {
-            margin-bottom: 2.5rem;
-            padding: 2rem;
-            background: #ffffff; /* Sólido */
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            /* Removido backdrop-filter */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .agencies-list-section h3, .add-agency-section h3, .form-section h3 {
-            color: #1f2937;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .agencies-list {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .agency-item {
-            background: #f8fafc; /* Cor sólida */
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            transition: none; /* Evita repintura complexa */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .agency-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            width: 100%;
-        }
-
-        .agency-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #374151;
-        }
-
-        .agency-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: 8px;
-        }
-
-        .templates-list {
-            border-top: 1px solid #e2e8f0;
-            width: 100%;
-            padding: 0.75rem 1.5rem;
-            background: #fff;
-        }
-
-        .template-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
+        .templates-list { border-top: 1px solid #e2e8f0; width: 100%; padding: 0.75rem 1.5rem; background: #fff; }
+        .template-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; }
         .template-item:last-child { border-bottom: none; }
-
-        .template-name {
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
+        .template-name { font-size: 0.9rem; color: #475569; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
         .template-name .fa-file-pdf { color: #dc2626; }
-
-        .remove-template-btn {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0.5rem;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .remove-template-btn { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0.5rem; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
         .remove-template-btn:hover { background-color: #fee2e2; }
 
-        /* Inputs */
-        .form-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex: 1;
-            min-width: 0;
-        }
+        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 0; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: flex-start; }
+        .form-group label { display: block; font-weight: 500; color: #374151; font-size: 0.875rem; }
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.875rem 1rem; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95rem; background: #f9fafb; color: #374151; transform: translateZ(0); }
+        .form-select { cursor: pointer; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25em; padding-right: 3rem; appearance: none; -webkit-appearance: none; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); background: #fff; }
+        .form-textarea { resize: vertical; min-height: 100px; }
+        .file-input { padding: 0.5rem; border: 2px dashed #d1d5db; border-radius: 12px; background: #f9fafb; cursor: pointer; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            color: #374151;
-            font-size: 0.875rem;
-        }
-
-        .form-input, .form-textarea, .form-select {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            /* FIX: Cor sólida para performance e evita repintura */
-            background: #f9fafb;
-            color: #374151;
-            transform: translateZ(0); /* Camada própria */
-        }
-
-        .form-select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.25em;
-            padding-right: 3rem;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-            background: #fff;
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .file-input {
-            padding: 0.5rem;
-            border: 2px dashed #d1d5db;
-            border-radius: 12px;
-            background: #f9fafb;
-            cursor: pointer;
-        }
-
-        .template-status {
-            margin-top: 10px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
+        .template-status { margin-top: 10px; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; }
         .template-status.loading { background-color: #e3f2fd; color: #1976d2; }
         .template-status.success { background-color: #e8f5e9; color: #2e7d32; }
         .template-status.error { background-color: #ffebee; color: #c62828; }
+        .total-field { background: #f3f4f6 !important; font-weight: 600; color: #1f2937; }
 
-        .total-field {
-            background: #f3f4f6 !important;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        /* Destinations */
-        .destination-header {
-            display: grid;
-            grid-template-columns: 2fr 150px 120px 40px;
-            gap: 1rem;
-            align-items: center;
-            padding: 0 1rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
+        .destination-header { display: grid; grid-template-columns: 2fr 150px 120px 40px; gap: 1rem; align-items: center; padding: 0 1rem; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-secondary); }
         .destinations-container { margin-bottom: 1rem; }
-
-        .destination-row {
-            display: grid;
-            grid-template-columns: 2fr 150px 120px 40px;
-            gap: 1rem;
-            align-items: end;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            /* FIX: Performance */
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            align-items: center;
-            transform: translateZ(0);
-        }
-
+        .destination-row { display: grid; grid-template-columns: 2fr 150px 120px 40px; gap: 1rem; align-items: end; margin-bottom: 1rem; padding: 1rem; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; align-items: center; transform: translateZ(0); }
         .destination-row .form-group { margin-bottom: 0; }
+        .remove-destination-btn { background: #fecaca; color: #dc2626; border: none; min-width: 40px; height: 40px; padding: 0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .remove-destination-btn {
-            background: #fecaca;
-            color: #dc2626;
-            border: none;
-            min-width: 40px;
-            height: 40px;
-            padding: 0;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Passengers */
         .passengers-container { margin-bottom: 1.5rem; }
-
-        .passenger-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            /* FIX: Performance */
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            transform: translateZ(0); /* Aceleração de hardware */
-        }
-
-        .passenger-row label {
-            min-width: 60px;
-            font-weight: 600;
-            color: #4f46e5;
-            margin-bottom: 0;
-        }
-
+        .passenger-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; transform: translateZ(0); }
+        .passenger-row label { min-width: 60px; font-weight: 600; color: #4f46e5; margin-bottom: 0; }
         .passenger-row input { flex: 1; }
+        .remove-passenger-btn { min-width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; background-color: #fee2e2; border: none; color: #dc2626; }
 
-        .remove-passenger-btn {
-            min-width: 40px;
-            height: 40px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            background-color: #fee2e2;
-            border: none;
-            color: #dc2626;
-        }
-
-        /* Vouchers List */
         .vouchers-list-container { padding: 2rem; }
-
-        .voucher-item {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transform: translateZ(0);
-        }
-
-        .voucher-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .voucher-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #4338ca;
-            margin-bottom: 0.25rem;
-        }
-
-        .voucher-date {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
+        .voucher-item { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); transform: translateZ(0); }
+        .voucher-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .voucher-title { font-size: 1.25rem; font-weight: 600; color: #4338ca; margin-bottom: 0.25rem; }
+        .voucher-date { color: #6b7280; font-size: 0.875rem; }
         .voucher-actions { display: flex; gap: 0.5rem; }
         .voucher-actions .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
-
-        .voucher-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #f3f4f6;
-        }
-
+        .voucher-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid #f3f4f6; }
         .voucher-info-item { display: flex; flex-direction: column; }
-        .voucher-info-label {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        .voucher-info-label { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .voucher-info-value { font-weight: 600; color: #374151; }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #6b7280;
-        }
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #6b7280; }
         .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; color: #9ca3af; }
         .empty-state h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #374151; }
 
-        /* Form Actions */
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            padding-top: 2rem;
-            border-top: 1px solid #e5e7eb;
-            margin-top: 2rem;
-        }
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 2rem; border-top: 1px solid #e5e7eb; margin-top: 2rem; }
 
-        /* Autocomplete */
-        .autocomplete-suggestions {
-            position: absolute;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-            -webkit-overflow-scrolling: touch;
-        }
+        .autocomplete-suggestions { position: absolute; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); max-height: 200px; overflow-y: auto; z-index: 1000; display: none; -webkit-overflow-scrolling: touch; }
+        .autocomplete-suggestion { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #f3f4f6; min-height: 44px; display: flex; align-items: center; }
+        .autocomplete-suggestion:hover, .autocomplete-suggestion.selected { background: #eff6ff; color: #2563eb; }
 
-        .autocomplete-suggestion {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            border-bottom: 1px solid #f3f4f6;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-        }
-
-        .autocomplete-suggestion:hover, .autocomplete-suggestion.selected {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
-        /* Phone Input Styles */
-        .passenger-phones-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            align-items: flex-start;
-            margin-top: 1.5rem;
-        }
-
-        .passenger-phone-unit {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex: 1;
-        }
-
-        .phone-input-group {
-            display: flex;
-            gap: 0.5rem;
-            align-items: stretch;
-            position: relative;
-            width: 100%;
-        }
-
-        .country-input-container {
-            position: relative;
-            display: flex;
-            min-width: 120px;
-            max-width: 140px;
-            flex-shrink: 0;
-        }
-
-        .country-input {
-            background: white;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            padding: 0.875rem 1rem;
-            font-size: 0.95rem;
-            color: #374151;
-            width: 100%;
-            font-weight: 500;
-        }
-
-        .country-dropdown {
-            position: absolute;
-            top: 105%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            display: none;
-        }
-
-        .country-dropdown-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 0.875rem;
-        }
-
+        .passenger-phones-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: flex-start; margin-top: 1.5rem; }
+        .passenger-phone-unit { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+        .phone-input-group { display: flex; gap: 0.5rem; align-items: stretch; position: relative; width: 100%; }
+        .country-input-container { position: relative; display: flex; min-width: 120px; max-width: 140px; flex-shrink: 0; }
+        .country-input { background: white; border: 1px solid #d1d5db; border-radius: 12px; padding: 0.875rem 1rem; font-size: 0.95rem; color: #374151; width: 100%; font-weight: 500; }
+        .country-dropdown { position: absolute; top: 105%; left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 12px; max-height: 250px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: none; }
+        .country-dropdown-item { padding: 0.75rem 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; font-size: 0.875rem; }
         .country-dropdown-item:hover { background-color: #eff6ff; }
-
         .phone-input { flex: 1; min-width: 0; }
         .phone-input.valid { border-color: #10b981; }
         .phone-input.warning { border-color: #f59e0b; }
         .phone-input.error { border-color: #ef4444; }
 
-        /* Contractor Header Styles & Fix Flickering */
-        .contractor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
+        .contractor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
         .contractor-header h3 { margin: 0; }
+        .contractor-fields { transition: opacity 0.3s ease, max-height 0.3s ease; will-change: opacity, max-height; max-height: 0; overflow: hidden; opacity: 0; }
+        .contractor-fields.show { max-height: 1500px; opacity: 1; }
+        #toggle-contractor-btn { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: #374151; cursor: pointer; }
+        .checkbox-label input[type="checkbox"] { width: 1.25em; height: 1.25em; cursor: pointer; }
 
-        .contractor-fields {
-            /* FIX: Animação simplificada para evitar tremedeira */
-            transition: opacity 0.3s ease, max-height 0.3s ease;
-            will-change: opacity, max-height;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        .contractor-fields.show {
-            max-height: 1500px; /* Valor seguro */
-            opacity: 1;
-        }
-
-        #toggle-contractor-btn {
-            background: #f1f5f9;
-            color: #475569;
-            border: 1px solid #e2e8f0;
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-            cursor: pointer;
-        }
-
-        .checkbox-label input[type="checkbox"] {
-            width: 1.25em;
-            height: 1.25em;
-            cursor: pointer;
-        }
-
-        /* Message/Toast Notification */
-        .message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 300px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            animation: slideInRight 0.5s ease-out;
-        }
-
+        .message { position: fixed; top: 20px; right: 20px; padding: 1rem 1.5rem; border-radius: 12px; color: white; font-weight: 600; z-index: 10000; display: flex; align-items: center; gap: 0.75rem; min-width: 300px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); animation: slideInRight 0.5s ease-out; }
         .message-success { background: #10b981; }
         .message-error { background: #ef4444; }
 
-        @keyframes slideInRight {
-            from { transform: translateX(110%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        @keyframes slideInRight { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(110%); opacity: 0; } }
 
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(110%); opacity: 0; }
+        /* ========================================= */
+        /* ESTILOS DO NOVO MODAL DA IA (COPILOTO)    */
+        /* ========================================= */
+        .ai-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10000; display: none; 
+            align-items: center; justify-content: center; backdrop-filter: blur(4px);
+        }
+        .ai-modal-content {
+            background: #fff; border-radius: 20px; width: 95%; max-width: 550px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
+            display: flex; flex-direction: column; max-height: 90vh;
+            animation: slideIn 0.3s ease-out;
+        }
+        .ai-modal-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5); color: white;
+            padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .ai-modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        .ai-modal-header button {
+            background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer;
+        }
+        .ai-modal-body {
+            padding: 1.5rem; overflow-y: auto; flex: 1; background: #f8fafc;
+        }
+        .ai-message {
+            background: #eef2ff; color: #4338ca; padding: 1rem; border-radius: 12px;
+            margin-bottom: 1rem; font-weight: 500; border-left: 4px solid #6366f1;
+            font-size: 0.95rem;
+        }
+        .ai-missing-fields {
+            color: #dc2626; font-size: 0.9rem; margin-bottom: 1.5rem;
+        }
+        .ai-missing-fields span {
+            display: inline-block; background: #fee2e2; padding: 0.25rem 0.6rem; 
+            border-radius: 6px; margin: 2px; font-weight: 600;
+        }
+        .ai-summary {
+            background: white; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem;
+        }
+        .ai-summary strong { color: #1f2937; }
+        .ai-modal-footer {
+            padding: 1.5rem; border-top: 1px solid #e2e8f0; background: white;
+        }
+        .ai-input-group {
+            display: flex; gap: 0.5rem; margin-bottom: 1rem;
+        }
+        .ai-input-group input {
+            flex: 1; padding: 0.8rem 1rem; border: 1px solid #d1d5db; border-radius: 12px; 
+            outline: none; font-size: 0.95rem;
+        }
+        .ai-input-group input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .ai-mic-btn {
+            background: #f1f5f9; color: #475569; border: 1px solid #d1d5db; border-radius: 12px;
+            width: 48px; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            transition: all 0.2s; font-size: 1.1rem;
+        }
+        .ai-mic-btn.recording {
+            background: #ef4444; color: white; border-color: #ef4444; animation: pulse 1.5s infinite;
+        }
+        .ai-processing { display: none; text-align: center; color: #4f46e5; font-weight: 600; padding: 1rem; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         /* Responsive Design */
@@ -865,12 +314,9 @@
             .remove-destination-btn { justify-self: center; margin-top: 0.5rem; }
         }
 
-        /* iOS and Touch Improvements */
         @supports (-webkit-touch-callout: none) {
             .form-input, .form-select, .form-textarea, .phone-input, .country-input {
-                font-size: 16px !important;
-                -webkit-appearance: none;
-                border-radius: 12px;
+                font-size: 16px !important; -webkit-appearance: none; border-radius: 12px;
             }
             body { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
             .screen, .form-section { -webkit-overflow-scrolling: touch; }
@@ -906,8 +352,7 @@
                 <div class="config-form">
                     <div class="agencies-list-section">
                         <h3><i class="fas fa-list"></i> Agências Cadastradas</h3>
-                        <div id="agencies-list" class="agencies-list">
-                            </div>
+                        <div id="agencies-list" class="agencies-list"></div>
                     </div>
 
                     <div class="add-agency-section">
@@ -915,8 +360,7 @@
                         <form id="agency-config-form">
                             <div class="form-group">
                                 <label for="agency-select-for-template">Para a Agência *</label>
-                                <select id="agency-select-for-template" class="form-select" required>
-                                    </select>
+                                <select id="agency-select-for-template" class="form-select" required></select>
                             </div>
                             <div class="form-group" id="new-agency-name-group" style="display: none;">
                                 <label for="new-agency-name">Nome da Nova Agência *</label>
@@ -953,8 +397,7 @@
                     </button>
                 </div>
                 <div class="vouchers-list-container">
-                    <div id="vouchers-list" class="vouchers-list">
-                        </div>
+                    <div id="vouchers-list" class="vouchers-list"></div>
                     <div id="empty-state" class="empty-state" style="display: none;">
                         <i class="fas fa-ticket-alt"></i>
                         <h3>Nenhum voucher criado ainda</h3>
@@ -969,9 +412,25 @@
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <h2 id="voucher-form-title"><i class="fas fa-plus"></i> Novo Voucher</h2>
-                    <div></div> </div>
+                    <div></div> 
+                </div>
 
                 <form id="voucher-form" class="voucher-form">
+                    
+                    <div class="form-section ai-upload-section" style="background: linear-gradient(135deg, #eef2ff, #f3e8ff); border: 2px dashed #818cf8; text-align: center; margin-bottom: 2rem;">
+                        <h3 style="color: #4f46e5; justify-content: center;"><i class="fas fa-magic"></i> Assistente Inteligente</h3>
+                        <p style="color: #475569; font-size: 0.9rem; margin-bottom: 1rem;">Envie a foto do voucher, print do WhatsApp ou anotações.</p>
+                        
+                        <input type="file" id="ai-image-input" accept="image/*" style="display: none;">
+                        
+                        <button type="button" id="trigger-ai-btn" class="btn btn-primary" style="background: #6366f1; border-radius: 50px; padding: 1rem 2rem; margin: 0 auto; display: inline-flex;">
+                            <i class="fas fa-camera"></i> Ler Documento
+                        </button>
+
+                        <div id="ai-loading-main" style="display: none; margin-top: 1rem; color: #4f46e5; font-weight: 600;">
+                            <i class="fas fa-circle-notch fa-spin"></i> O Copiloto está analisando...
+                        </div>
+                    </div>
                     <div class="form-section">
                         <h3><i class="fas fa-building"></i> Agência e Template</h3>
                         <div class="form-row">
@@ -979,13 +438,13 @@
                                 <label for="selected-agency">Selecione a Agência *</label>
                                 <select id="selected-agency" class="form-select" required>
                                     <option value="">Selecione uma agência...</option>
-                                    </select>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="selected-template">Selecione o Template *</label>
                                 <select id="selected-template" class="form-select" required>
                                     <option value="">Primeiro selecione uma agência...</option>
-                                    </select>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -997,8 +456,7 @@
                             <label>Data</label>
                             <label>Horário</label>
                         </div>
-                        <div id="destinations-container" class="destinations-container">
-                            </div>
+                        <div id="destinations-container" class="destinations-container"></div>
                         <button type="button" id="add-destination-btn" class="btn btn-secondary" style="margin-top: 1rem;">
                             <i class="fas fa-plus"></i> Adicionar Destino
                         </button>
@@ -1012,15 +470,13 @@
                         </div>
 
                         <h4>Lista de Passageiros</h4>
-                        <div id="passengers-container" class="passengers-container">
-                            </div>
+                        <div id="passengers-container" class="passengers-container"></div>
                         <button type="button" id="add-passenger-btn" class="btn btn-secondary">
                             <i class="fas fa-plus"></i> Adicionar Passageiro
                         </button>
 
                         <h4 style="margin-top: 1.5rem;">Contato dos Passageiros</h4>
-                        <div class="passenger-phones-container">
-                            </div>
+                        <div class="passenger-phones-container"></div>
                     </div>
 
                     <div class="form-section">
@@ -1116,15 +572,49 @@
         </main>
     </div>
 
+    <div id="ai-assistant-modal" class="ai-modal">
+        <div class="ai-modal-content">
+            <div class="ai-modal-header">
+                <h3><i class="fas fa-robot"></i> Copiloto</h3>
+                <button type="button" id="close-ai-modal">&times;</button>
+            </div>
+            
+            <div class="ai-modal-body" id="ai-modal-body">
+                <div id="ai-message" class="ai-message">Olá! Estou analisando...</div>
+                
+                <div id="ai-missing-fields" class="ai-missing-fields" style="display: none;">
+                    <strong>Falta preencher:</strong> <br>
+                    <div id="ai-missing-tags"></div>
+                </div>
+
+                <div class="ai-summary" id="ai-data-summary">
+                    </div>
+            </div>
+
+            <div id="ai-processing-chat" class="ai-processing">
+                <i class="fas fa-circle-notch fa-spin"></i> Atualizando dados...
+            </div>
+
+            <div class="ai-modal-footer">
+                <div class="ai-input-group">
+                    <button type="button" id="ai-mic-btn" class="ai-mic-btn" title="Falar correção"><i class="fas fa-microphone"></i></button>
+                    <input type="text" id="ai-text-input" placeholder="Ex: Adiciona 1 colo e altera destino pra Canoa...">
+                    <button type="button" id="ai-send-btn" class="btn btn-primary" style="padding: 0.8rem;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <button type="button" id="ai-approve-btn" class="btn btn-success" style="width: 100%; padding: 1rem;">
+                    <i class="fas fa-check-circle"></i> Tudo Certo! Preencher Formulário
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
 
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/libphonenumber-js@1.11.4/bundle/libphonenumber-js.min.js"></script>
 
     <script>
-        // Dados dos países
         window.COUNTRIES_DATA = [
-            // América do Sul
             { code: 'BR', name: 'Brasil', dialCode: '55' },
             { code: 'AR', name: 'Argentina', dialCode: '54' },
             { code: 'PY', name: 'Paraguai', dialCode: '595' },
@@ -1135,43 +625,256 @@
             { code: 'CO', name: 'Colômbia', dialCode: '57' },
             { code: 'VE', name: 'Venezuela', dialCode: '58' },
             { code: 'EC', name: 'Equador', dialCode: '593' },
-            { code: 'GY', name: 'Guiana', dialCode: '592' },
-            { code: 'SR', name: 'Suriname', dialCode: '597' },
-            { code: 'GF', name: 'Guiana Francesa', dialCode: '594' },
-            // América do Norte
             { code: 'US', name: 'Estados Unidos', dialCode: '1' },
-            { code: 'CA', name: 'Canadá', dialCode: '1' },
-            { code: 'MX', name: 'México', dialCode: '52' },
-            // Europa
-            { code: 'PT', name: 'Portugal', dialCode: '351' },
-            { code: 'ES', name: 'Espanha', dialCode: '34' },
-            { code: 'FR', name: 'França', dialCode: '33' },
-            { code: 'IT', name: 'Itália', dialCode: '39' },
-            { code: 'DE', name: 'Alemanha', dialCode: '49' },
-            { code: 'GB', name: 'Reino Unido', dialCode: '44' }
+            { code: 'PT', name: 'Portugal', dialCode: '351' }
         ];
     </script>
 
     <script>
-        // Conteúdo do arquivo app.js
         class VoucherSystem {
             constructor() {
                 this.editingVoucherId = null;
                 this.autocompleteData = this.loadAutocompleteData();
                 this.countriesData = this.getCountriesData();
+                this.currentAIBody = null; // Armazena o rascunho do Assistente IA
+                this.recognition = null;
                 this.init();
             }
 
-            getCountriesData() {
-                return window.COUNTRIES_DATA || [{ code: 'BR', name: 'Brasil', dialCode: '55' }];
-            }
+            getCountriesData() { return window.COUNTRIES_DATA || [{ code: 'BR', name: 'Brasil', dialCode: '55' }]; }
 
             init() {
                 this.setupEventListeners();
+                this.setupVoiceRecognition();
                 this.loadApp();
                 this.setupAutocomplete();
                 this.setupFormCalculations();
             }
+
+            // ==========================================
+            // CÉREBRO DA IA (NOVO FLUXO DO ASSISTENTE)
+            // ==========================================
+            
+            async processAIUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const btn = document.getElementById('trigger-ai-btn');
+                const loading = document.getElementById('ai-loading-main');
+                
+                btn.style.display = 'none';
+                loading.style.display = 'block';
+
+                try {
+                    const base64Image = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+
+                    // ATENÇÃO: Confirme se este link da Vercel é o exato gerado para você
+                    const response = await fetch('https://voucher-ai-api.vercel.app/api/extrair-voucher', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            imageBase64: base64Image,
+                            mimeType: file.type
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erro na comunicação com a API da Vercel.');
+
+                    const aiResponse = await response.json();
+                    this.currentAIBody = aiResponse;
+                    this.openAIModal();
+
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Falha ao processar a imagem. O servidor está rodando?');
+                } finally {
+                    btn.style.display = 'inline-flex';
+                    loading.style.display = 'none';
+                    event.target.value = ''; 
+                }
+            }
+
+            async sendAICorrection() {
+                const inputEl = document.getElementById('ai-text-input');
+                const text = inputEl.value.trim();
+                if (!text || !this.currentAIBody) return;
+
+                const chatLoading = document.getElementById('ai-processing-chat');
+                const footer = document.querySelector('.ai-modal-footer');
+                
+                chatLoading.style.display = 'block';
+                footer.style.opacity = '0.5';
+                footer.style.pointerEvents = 'none';
+
+                try {
+                    const response = await fetch('https://voucher-ai-api.vercel.app/api/corrigir-voucher', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            dadosAtuais: this.currentAIBody.dados,
+                            instrucaoUsuario: text
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erro na correção.');
+
+                    const newAiResponse = await response.json();
+                    this.currentAIBody = newAiResponse;
+                    inputEl.value = '';
+                    this.updateAIModalUI();
+
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Não foi possível aplicar a correção.');
+                } finally {
+                    chatLoading.style.display = 'none';
+                    footer.style.opacity = '1';
+                    footer.style.pointerEvents = 'auto';
+                }
+            }
+
+            openAIModal() {
+                document.getElementById('ai-assistant-modal').style.display = 'flex';
+                this.updateAIModalUI();
+            }
+
+            closeAIModal() {
+                document.getElementById('ai-assistant-modal').style.display = 'none';
+            }
+
+            updateAIModalUI() {
+                if (!this.currentAIBody) return;
+
+                const data = this.currentAIBody;
+                const d = data.dados;
+
+                // 1. Atualiza Mensagem
+                document.getElementById('ai-message').innerText = data.mensagem_assistente || "Aqui está o que encontrei:";
+
+                // 2. Trata os campos faltando
+                const missingContainer = document.getElementById('ai-missing-fields');
+                const missingTags = document.getElementById('ai-missing-tags');
+                
+                if (data.status === "incompleto" && data.campos_faltando && data.campos_faltando.length > 0) {
+                    missingContainer.style.display = 'block';
+                    missingTags.innerHTML = data.campos_faltando.map(campo => `<span><i class="fas fa-exclamation-triangle"></i> ${campo}</span>`).join('');
+                } else {
+                    missingContainer.style.display = 'none';
+                }
+
+                // 3. Monta o Sumário
+                let destinosHtml = (d.destinos && d.destinos.length > 0) 
+                    ? d.destinos.map(x => `${x.destination} (${x.date || 'sem data'})`).join(' | ') 
+                    : 'Nenhum identificado';
+
+                let paxHtml = (d.passengers && d.passengers.length > 0)
+                    ? d.passengers.join(', ')
+                    : 'Nenhum identificado';
+
+                const summaryHtml = `
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-user"></i> Contratante:</strong> ${d.nome_contratante || '---'}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-phone"></i> Contato:</strong> ${d.contato_contratante || '---'}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-map-marker-alt"></i> Destino:</strong> ${destinosHtml}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-users"></i> Quantidades:</strong> ${d.qt_adulto || 0} Adultos | ${d.qt_crianca || 0} Crianças | ${d.qt_colo || 0} Colos</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-list"></i> Passageiros:</strong> ${paxHtml}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-dollar-sign"></i> Total:</strong> R$ ${parseFloat(d.total_a_pagar || 0).toFixed(2)}</div>
+                `;
+                document.getElementById('ai-data-summary').innerHTML = summaryHtml;
+
+                // Rola para o fim se for uma mensagem nova
+                const body = document.getElementById('ai-modal-body');
+                body.scrollTop = body.scrollHeight;
+            }
+
+            approveAIData() {
+                if (!this.currentAIBody) return;
+                const d = this.currentAIBody.dados;
+
+                try {
+                    // Preenche campos simples
+                    if (d.nome_contratante) document.getElementById('nome_contratante').value = d.nome_contratante;
+                    if (d.email_contratante) document.getElementById('email_contratante').value = d.email_contratante;
+                    if (d.local_embarque) document.getElementById('local_embarque').value = d.local_embarque;
+                    if (d.qt_adulto !== undefined) document.getElementById('qt_adulto').value = d.qt_adulto;
+                    if (d.qt_crianca !== undefined) document.getElementById('qt_crianca').value = d.qt_crianca;
+                    if (d.qt_colo !== undefined) document.getElementById('qt_colo').value = d.qt_colo;
+                    if (d.total_a_pagar !== undefined) document.getElementById('total_a_pagar').value = d.total_a_pagar;
+                    if (d.pre_reserva !== undefined) document.getElementById('pre_reserva').value = d.pre_reserva;
+
+                    if (d.contato_contratante) this.populatePhoneField('contato_contratante', d.contato_contratante);
+
+                    if (d.destinos && d.destinos.length > 0) {
+                        this.clearDestinations();
+                        d.destinos.forEach(dest => this.addDestination(dest));
+                    }
+
+                    if (d.passengers && d.passengers.length > 0) {
+                        this.clearPassengers();
+                        d.passengers.forEach(pax => this.addPassenger(pax));
+                    }
+
+                    this.calculateTotalPassengers();
+                    this.calculateRemainingAmount();
+                    
+                    const contractorFields = document.getElementById('contractor-fields');
+                    if (d.nome_contratante && !contractorFields.classList.contains('show')) {
+                        this.toggleContractorFields();
+                    }
+                    
+                    this.closeAIModal();
+                    this.showSuccessMessage('Campos preenchidos! Você pode gerar o PDF.');
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Erro ao transferir dados da IA para o formulário.');
+                }
+            }
+
+            setupVoiceRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    console.warn('Reconhecimento de voz não suportado neste navegador.');
+                    document.getElementById('ai-mic-btn').style.display = 'none';
+                    return;
+                }
+                
+                this.recognition = new SpeechRecognition();
+                this.recognition.lang = 'pt-BR';
+                this.recognition.interimResults = false;
+                
+                const micBtn = document.getElementById('ai-mic-btn');
+                const textInput = document.getElementById('ai-text-input');
+
+                micBtn.addEventListener('click', () => {
+                    if (micBtn.classList.contains('recording')) {
+                        this.recognition.stop();
+                    } else {
+                        try {
+                            this.recognition.start();
+                            micBtn.classList.add('recording');
+                            textInput.placeholder = 'Ouvindo...';
+                        } catch(e) { console.error("Erro no microfone:", e); }
+                    }
+                });
+
+                this.recognition.addEventListener('result', (e) => {
+                    const transcript = e.results[0][0].transcript;
+                    textInput.value = transcript;
+                    this.sendAICorrection(); // Envia automaticamente após terminar de falar
+                });
+
+                this.recognition.addEventListener('end', () => {
+                    micBtn.classList.remove('recording');
+                    textInput.placeholder = 'Ex: Adiciona 1 colo e altera destino...';
+                });
+            }
+
+            // ==========================================
+            // ROTINAS NORMAIS DO SISTEMA
+            // ==========================================
 
             getCombinedPhoneNumber(inputId) {
                 const phoneInput = document.getElementById(inputId);
@@ -1185,14 +888,10 @@
             }
 
             parsePhoneNumber(fullNumber) {
-                if (!fullNumber || typeof fullNumber !== 'string') {
-                    return { ddi: '+55', number: '' };
-                }
+                if (!fullNumber || typeof fullNumber !== 'string') return { ddi: '+55', number: '' };
                 const trimmed = fullNumber.trim();
                 const parts = trimmed.split(' ');
-                if (parts.length === 1 && parts[0].startsWith('+')) {
-                    return { ddi: parts[0], number: '' };
-                }
+                if (parts.length === 1 && parts[0].startsWith('+')) return { ddi: parts[0], number: '' };
                 if (parts.length > 1 && parts[0].startsWith('+')) {
                     const ddi = parts[0];
                     const number = parts.slice(1).join(' ');
@@ -1238,6 +937,7 @@
                     }
                     this.showVouchersListScreen();
                 });
+                
                 document.getElementById('agency-config-form').addEventListener('submit', this.saveAgencyConfig.bind(this));
                 document.getElementById('pdf-template').addEventListener('change', (e) => this.handlePDFTemplateUpload(e));
                 document.getElementById('selected-agency').addEventListener('change', (e) => this.loadTemplatesForAgency(e.target.value));
@@ -1247,16 +947,31 @@
                 document.getElementById('preview-pdf-btn').addEventListener('click', () => this.generatePDF());
                 document.getElementById('add-destination-btn').addEventListener('click', () => this.addDestination());
                 document.getElementById('add-passenger-btn').addEventListener('click', () => this.addPassenger());
+                
                 document.querySelectorAll('.passenger-count').forEach(input => {
                     input.addEventListener('input', () => this.calculateTotalPassengers());
                 });
                 document.querySelectorAll('.money-input').forEach(input => {
                     input.addEventListener('input', () => this.calculateRemainingAmount());
                 });
+                
                 document.getElementById('observacao').addEventListener('input', this.handleObservacaoInput.bind(this));
+                
                 const today = new Date();
                 const todayISO = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
                 document.getElementById('data_contrato').value = todayISO;
+
+                // Eventos do Assistente IA
+                document.getElementById('trigger-ai-btn')?.addEventListener('click', () => document.getElementById('ai-image-input').click());
+                document.getElementById('ai-image-input')?.addEventListener('change', (e) => this.processAIUpload(e));
+                document.getElementById('close-ai-modal')?.addEventListener('click', () => this.closeAIModal());
+                document.getElementById('ai-approve-btn')?.addEventListener('click', () => this.approveAIData());
+                document.getElementById('ai-send-btn')?.addEventListener('click', () => this.sendAICorrection());
+                
+                // Enviar texto da IA com a tecla "Enter"
+                document.getElementById('ai-text-input')?.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendAICorrection();
+                });
             }
 
             handleObservacaoInput(e) {
@@ -1927,7 +1642,6 @@
                 input.addEventListener('blur', () => setTimeout(() => this.hideAutocompleteSuggestions(), 200));
             }
 
-            // Otimização de Performance para Autocomplete com requestAnimationFrame
             showAutocompleteSuggestions(input, field) {
                 const value = input.value.toLowerCase();
                 const suggestions = (this.autocompleteData[field] || []).filter(s => s.toLowerCase().includes(value)).slice(0, 5);
@@ -1941,7 +1655,6 @@
             displayAutocompleteSuggestions(input, suggestions) {
                 const container = document.getElementById('autocomplete-suggestions');
                 
-                // Otimização: renderização no próximo frame
                 requestAnimationFrame(() => {
                     const rect = input.getBoundingClientRect();
                     container.style.left = `${rect.left}px`;
@@ -2215,5 +1928,4 @@
         });
     </script>
 </body>
-
 </html>
