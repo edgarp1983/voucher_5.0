@@ -6,194 +6,566 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2563eb">
     <meta name="description" content="Sistema de Vouchers para Agência de Viagens">
-    <title>Sistema de Vouchers - Ed</title>
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
+    <link rel="apple-touch-icon" href="icon-192.svg">
+    <title>Sistema de Vouchers - Agência de Viagens</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* MANTENDO SEUS ESTILOS ORIGINAIS */
+        /* Reset e Base Styles */
         :root {
-            --bg-primary: #f8fafc; --bg-secondary: #f1f5f9; --text-primary: #1f2937;
-            --text-secondary: #374151; --border-color: #e2e8f0; --primary-color: #4f46e5;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --text-primary: #1f2937;
+            --text-secondary: #374151;
+            --border-color: #e2e8f0;
+            --primary-color: #4f46e5;
             --card-bg: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif; line-height: 1.7; color: #374151;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
-            min-height: 100dvh; background-attachment: fixed; overflow-x: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* ESTILOS DO NOVO PAINEL DE ABAS IA */
-        .ai-input-tabs { display: flex; background: #e2e8f0; padding: 4px; border-radius: 12px; margin-bottom: 15px; gap: 4px; }
-        .ai-tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #64748b; transition: 0.2s; background: transparent; }
-        .ai-tab-btn.active { background: white; color: #4f46e5; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .ai-tab-content { display: none; }
-        .ai-tab-content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.7;
+            color: #374151;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+            min-height: 100dvh;
+            background-attachment: fixed;
+            font-weight: 400;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
 
-        /* REAPROVEITANDO SUAS CLASSES DE LOADING E MODAL */
-        .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .loading-spinner { width: 50px; height: 50px; border: 4px solid rgba(99, 102, 241, 0.2); border-top: 4px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8fafc; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999; color: #1f2937;
+        }
+
+        .loading-spinner {
+            width: 50px; height: 50px; border: 4px solid rgba(99, 102, 241, 0.2);
+            border-top: 4px solid #6366f1; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 20px;
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* CLASSES DE FORMULÁRIO (SUAS ORIGINAIS) */
-        .app-header { background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
-        .main-content { flex: 1; padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .screen { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; }
-        .screen-header { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .form-section { margin-bottom: 2.5rem; padding: 2rem; background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; }
-        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.875rem 1rem; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95rem; background: #f9fafb; }
-        
-        /* ESTILO DO BOTÃO DE MICROFONE */
-        .mic-trigger { width: 80px; height: 80px; border-radius: 50%; background: #fee2e2; color: #ef4444; border: 4px solid #fca5a5; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 20px auto; transition: 0.3s; }
-        .mic-trigger.recording { background: #ef4444; color: white; border-color: #991b1b; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        .app-container { min-height: 100dvh; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
 
-        /* MODAL IA (SEU ORIGINAL) */
-        .ai-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .ai-modal-content { background: #fff; border-radius: 20px; width: 95%; max-width: 550px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; }
-        
-        /* ... outros estilos do seu original ... */
-        .btn { padding: 0.875rem 1.75rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .btn-primary { background: #4f46e5; color: white; }
-        .btn-success { background: #10b981; color: white; }
-        .btn-secondary { background: #64748b; color: white; }
-        .destination-row, .passenger-row { display: grid; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1rem; align-items: center; }
-        .destination-row { grid-template-columns: 2fr 150px 120px 40px; }
-        .passenger-row { grid-template-columns: 60px 1fr 40px; }
+        .app-header { background: #ffffff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; transform: translateZ(0); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .app-header h1 { color: #4f46e5; font-size: 1.875rem; font-weight: 700; }
+        .app-header h1 i { margin-right: 0.5rem; }
+
+        .config-btn { background: #4f46e5; color: white; border: none; padding: 0.875rem; border-radius: 16px; cursor: pointer; transition: transform 0.2s ease, background 0.2s ease; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        .config-btn:hover { background: #4338ca; transform: translateY(-2px); }
+
+        .main-content { flex: 1; padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; position: relative; }
+
+        .screen { background: #ffffff; border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow: hidden; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .screen-header { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; position: relative; }
+        .screen-header h2 { font-size: 1.5rem; font-weight: 600; }
+
+        .back-btn { background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 0.75rem; border-radius: 50%; cursor: pointer; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+        .btn { padding: 0.875rem 1.75rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease; font-size: 0.875rem; transform: translateZ(0); }
+        .btn-primary { background: #4f46e5; color: white; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background: #4338ca; }
+        .btn-secondary { background: #64748b; color: white; box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2); }
+        .btn-secondary:hover { background: #475569; }
+        .btn-success { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-info { background: #0ea5e9; color: white; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2); }
+        .btn-info:hover { background: #0284c7; }
+
+        .navigation-section { margin-top: 3rem; padding: 2.5rem; background: #ffffff; border-radius: 24px; border: 1px solid #e2e8f0; text-align: center; }
+        .btn-large { padding: 1rem 2rem; font-size: 1rem; min-width: 200px; }
+        .navigation-help { margin-top: 1.25rem; color: #6b7280; font-size: 0.95rem; }
+
+        .config-form, .voucher-form { padding: 2rem; }
+        .agencies-list-section, .add-agency-section, .form-section { margin-bottom: 2.5rem; padding: 2rem; background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .agencies-list-section h3, .add-agency-section h3, .form-section h3 { color: #1f2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+
+        .agencies-list { display: grid; gap: 1.5rem; }
+        .agency-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; display: flex; flex-direction: column; }
+        .agency-item-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; width: 100%; }
+        .agency-name { font-weight: 600; font-size: 1.1rem; color: #374151; }
+        .agency-actions { display: flex; gap: 0.5rem; }
+        .btn-small { padding: 0.5rem 1rem; font-size: 0.875rem; border-radius: 8px; }
+
+        .templates-list { border-top: 1px solid #e2e8f0; width: 100%; padding: 0.75rem 1.5rem; background: #fff; }
+        .template-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; }
+        .template-item:last-child { border-bottom: none; }
+        .template-name { font-size: 0.9rem; color: #475569; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+        .template-name .fa-file-pdf { color: #dc2626; }
+        .remove-template-btn { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0.5rem; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .remove-template-btn:hover { background-color: #fee2e2; }
+
+        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 0; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: flex-start; }
+        .form-group label { display: block; font-weight: 500; color: #374151; font-size: 0.875rem; }
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.875rem 1rem; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95rem; background: #f9fafb; color: #374151; transform: translateZ(0); }
+        .form-select { cursor: pointer; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25em; padding-right: 3rem; appearance: none; -webkit-appearance: none; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); background: #fff; }
+        .form-textarea { resize: vertical; min-height: 100px; }
+        .file-input { padding: 0.5rem; border: 2px dashed #d1d5db; border-radius: 12px; background: #f9fafb; cursor: pointer; }
+
+        .template-status { margin-top: 10px; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; }
+        .template-status.loading { background-color: #e3f2fd; color: #1976d2; }
+        .template-status.success { background-color: #e8f5e9; color: #2e7d32; }
+        .template-status.error { background-color: #ffebee; color: #c62828; }
+        .total-field { background: #f3f4f6 !important; font-weight: 600; color: #1f2937; }
+
+        .destination-header { display: grid; grid-template-columns: 2fr 150px 120px 40px; gap: 1rem; align-items: center; padding: 0 1rem; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-secondary); }
+        .destinations-container { margin-bottom: 1rem; }
+        .destination-row { display: grid; grid-template-columns: 2fr 150px 120px 40px; gap: 1rem; align-items: end; margin-bottom: 1rem; padding: 1rem; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; align-items: center; transform: translateZ(0); }
+        .destination-row .form-group { margin-bottom: 0; }
+        .remove-destination-btn { background: #fecaca; color: #dc2626; border: none; min-width: 40px; height: 40px; padding: 0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .passengers-container { margin-bottom: 1.5rem; }
+        .passenger-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; transform: translateZ(0); }
+        .passenger-row label { min-width: 60px; font-weight: 600; color: #4f46e5; margin-bottom: 0; }
+        .passenger-row input { flex: 1; }
+        .remove-passenger-btn { min-width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; background-color: #fee2e2; border: none; color: #dc2626; }
+
+        .vouchers-list-container { padding: 2rem; }
+        .voucher-item { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); transform: translateZ(0); }
+        .voucher-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .voucher-title { font-size: 1.25rem; font-weight: 600; color: #4338ca; margin-bottom: 0.25rem; }
+        .voucher-date { color: #6b7280; font-size: 0.875rem; }
+        .voucher-actions { display: flex; gap: 0.5rem; }
+        .voucher-actions .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+        .voucher-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid #f3f4f6; }
+        .voucher-info-item { display: flex; flex-direction: column; }
+        .voucher-info-label { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .voucher-info-value { font-weight: 600; color: #374151; }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #6b7280; }
+        .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; color: #9ca3af; }
+        .empty-state h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #374151; }
+
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 2rem; border-top: 1px solid #e5e7eb; margin-top: 2rem; }
+
+        .autocomplete-suggestions { position: absolute; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); max-height: 200px; overflow-y: auto; z-index: 1000; display: none; -webkit-overflow-scrolling: touch; }
+        .autocomplete-suggestion { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #f3f4f6; min-height: 44px; display: flex; align-items: center; }
+        .autocomplete-suggestion:hover, .autocomplete-suggestion.selected { background: #eff6ff; color: #2563eb; }
+
+        .passenger-phones-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: flex-start; margin-top: 1.5rem; }
+        .passenger-phone-unit { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+        .phone-input-group { display: flex; gap: 0.5rem; align-items: stretch; position: relative; width: 100%; }
+        .country-input-container { position: relative; display: flex; min-width: 120px; max-width: 140px; flex-shrink: 0; }
+        .country-input { background: white; border: 1px solid #d1d5db; border-radius: 12px; padding: 0.875rem 1rem; font-size: 0.95rem; color: #374151; width: 100%; font-weight: 500; }
+        .country-dropdown { position: absolute; top: 105%; left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 12px; max-height: 250px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: none; }
+        .country-dropdown-item { padding: 0.75rem 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; font-size: 0.875rem; }
+        .country-dropdown-item:hover { background-color: #eff6ff; }
+        .phone-input { flex: 1; min-width: 0; }
+        .phone-input.valid { border-color: #10b981; }
+        .phone-input.warning { border-color: #f59e0b; }
+        .phone-input.error { border-color: #ef4444; }
+
+        .contractor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .contractor-header h3 { margin: 0; }
+        .contractor-fields { transition: opacity 0.3s ease, max-height 0.3s ease; will-change: opacity, max-height; max-height: 0; overflow: hidden; opacity: 0; }
+        .contractor-fields.show { max-height: 1500px; opacity: 1; }
+        #toggle-contractor-btn { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: #374151; cursor: pointer; }
+        .checkbox-label input[type="checkbox"] { width: 1.25em; height: 1.25em; cursor: pointer; }
+
+        .message { position: fixed; top: 20px; right: 20px; padding: 1rem 1.5rem; border-radius: 12px; color: white; font-weight: 600; z-index: 10000; display: flex; align-items: center; gap: 0.75rem; min-width: 300px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); animation: slideInRight 0.5s ease-out; }
+        .message-success { background: #10b981; }
+        .message-error { background: #ef4444; }
+
+        @keyframes slideInRight { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(110%); opacity: 0; } }
+
+        /* ========================================= */
+        /* ESTILOS DO NOVO MODAL DA IA (COPILOTO)    */
+        /* ========================================= */
+        .ai-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10000; display: none; 
+            align-items: center; justify-content: center; backdrop-filter: blur(4px);
+        }
+        .ai-modal-content {
+            background: #fff; border-radius: 20px; width: 95%; max-width: 550px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
+            display: flex; flex-direction: column; max-height: 90vh;
+            animation: slideIn 0.3s ease-out;
+        }
+        .ai-modal-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5); color: white;
+            padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .ai-modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        .ai-modal-header button {
+            background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer;
+        }
+        .ai-modal-body {
+            padding: 1.5rem; overflow-y: auto; flex: 1; background: #f8fafc;
+        }
+        .ai-message {
+            background: #eef2ff; color: #4338ca; padding: 1rem; border-radius: 12px;
+            margin-bottom: 1rem; font-weight: 500; border-left: 4px solid #6366f1;
+            font-size: 0.95rem;
+        }
+        .ai-missing-fields {
+            color: #dc2626; font-size: 0.9rem; margin-bottom: 1.5rem;
+        }
+        .ai-missing-fields span {
+            display: inline-block; background: #fee2e2; padding: 0.25rem 0.6rem; 
+            border-radius: 6px; margin: 2px; font-weight: 600;
+        }
+        .ai-summary {
+            background: white; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem;
+        }
+        .ai-summary strong { color: #1f2937; }
+        .ai-modal-footer {
+            padding: 1.5rem; border-top: 1px solid #e2e8f0; background: white;
+        }
+        .ai-input-group {
+            display: flex; gap: 0.5rem; margin-bottom: 1rem;
+        }
+        .ai-input-group input {
+            flex: 1; padding: 0.8rem 1rem; border: 1px solid #d1d5db; border-radius: 12px; 
+            outline: none; font-size: 0.95rem;
+        }
+        .ai-input-group input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .ai-mic-btn {
+            background: #f1f5f9; color: #475569; border: 1px solid #d1d5db; border-radius: 12px;
+            width: 48px; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            transition: all 0.2s; font-size: 1.1rem;
+        }
+        .ai-mic-btn.recording {
+            background: #ef4444; color: white; border-color: #ef4444; animation: pulse 1.5s infinite;
+        }
+        .ai-processing { display: none; text-align: center; color: #4f46e5; font-weight: 600; padding: 1rem; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .destination-header { display: none; }
+            .main-content { padding: 1rem; }
+            .header-content { padding: 1rem 1.5rem; flex-direction: row; gap: 1rem; flex-wrap: wrap; }
+            .app-header h1 { font-size: 1.4rem; flex: 1; min-width: 200px; }
+            .config-btn { padding: 0.75rem; min-width: 44px; min-height: 44px; flex-shrink: 0; }
+            .screen { border-radius: 16px; margin: 0; }
+            .screen-header { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+            .config-form, .voucher-form, .form-section { padding: 1.5rem; margin-bottom: 1.5rem; }
+            .form-row { grid-template-columns: 1fr; gap: 1rem; }
+            .destination-row { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; }
+            .passenger-row { flex-direction: column; align-items: stretch; gap: 1rem; padding: 1.25rem; }
+            .passenger-row label { min-width: auto; margin-bottom: 0.5rem; }
+            .phone-input-group { flex-direction: column; gap: 0.75rem; }
+            .country-input-container { width: 100%; max-width: 160px; }
+            .passenger-phones-container { grid-template-columns: 1fr; gap: 1.5rem; }
+            .voucher-info { grid-template-columns: 1fr; gap: 1rem; }
+            .checkbox-group { grid-template-columns: 1fr; gap: 0.75rem; padding: 1.25rem; }
+            .agencies-list { gap: 1rem; }
+            .agency-item-header { flex-direction: column; align-items: stretch; gap: 1rem; padding: 1.25rem; }
+            .agency-actions { justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+            .templates-list { padding: 1rem 1.25rem; overflow-x: auto; }
+            .voucher-header { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 1.25rem; }
+            .voucher-actions { justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+            .form-actions { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+            .form-actions .btn { width: 100%; }
+            .navigation-section { padding: 1.5rem; margin-top: 2rem; }
+            .btn-large { width: 100%; padding: 1.25rem 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 0.5rem; }
+            .header-content { padding: 0.75rem 0.5rem; }
+            .app-header h1 { font-size: 1.25rem; }
+            .btn { padding: 1rem 1.5rem; font-size: 0.9rem; min-height: 48px; min-width: 120px; }
+            .btn-small { padding: 0.75rem 1rem; font-size: 0.85rem; min-height: 44px; min-width: 100px; }
+            .back-btn { min-width: 48px; min-height: 48px; padding: 1rem; }
+            .config-btn { min-width: 48px; min-height: 48px; }
+            .config-form, .voucher-form, .form-section { padding: 1rem; }
+            .screen-header { padding: 1rem; }
+            .screen-header h2 { font-size: 1.25rem; }
+            .form-input, .form-textarea, .form-select { padding: 1rem; font-size: 16px !important; min-height: 48px; }
+            .form-textarea { min-height: 120px; padding: 1rem; }
+            .phone-input, .country-input { font-size: 16px !important; min-height: 48px; padding: 1rem; }
+            .form-select { padding-right: 3rem; }
+            .passenger-row, .destination-row { padding: 0.75rem; }
+            .remove-passenger-btn, .remove-destination-btn { min-width: 44px; min-height: 44px; }
+            .navigation-section { padding: 1rem; }
+            .voucher-item { padding: 1rem; }
+            .destination-row { grid-template-columns: 1fr; gap: 0.5rem; }
+            .destination-row .form-group { margin-bottom: 0.75rem; }
+            .remove-destination-btn { justify-self: center; margin-top: 0.5rem; }
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            .form-input, .form-select, .form-textarea, .phone-input, .country-input {
+                font-size: 16px !important; -webkit-appearance: none; border-radius: 12px;
+            }
+            body { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+            .screen, .form-section { -webkit-overflow-scrolling: touch; }
+        }
     </style>
 </head>
 
 <body>
     <div id="loading-screen" class="loading-screen">
         <div class="loading-spinner"></div>
-        <p>Ed, seu sistema está carregando...</p>
+        <p>Carregando Sistema...</p>
     </div>
 
     <div id="app" class="app-container" style="display: none;">
         <header class="app-header">
             <div class="header-content">
-                <h1><i class="fas fa-plane"></i> VOUCHER PRO v5.0</h1>
-                <button id="config-btn" class="btn" style="background:#eef2ff; color:#4f46e5;"><i class="fas fa-cog"></i></button>
+                <h1><i class="fas fa-plane"></i> Sistema de Vouchers</h1>
+                <button id="config-btn" class="config-btn" title="Configurações da Agência">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </header>
 
         <main class="main-content">
-            <section id="vouchers-list-screen" class="screen">
+            <section id="config-screen" class="screen config-screen" style="display: none;">
                 <div class="screen-header">
-                    <h2>Meus Vouchers</h2>
-                    <button id="new-voucher-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Novo Voucher</button>
+                    <div>
+                        <h2><i class="fas fa-building"></i> Gerenciamento de Agências</h2>
+                        <p>Configure suas agências e seus respectivos templates PDF.</p>
+                    </div>
                 </div>
-                <div id="vouchers-list" class="padding: 2rem;"></div>
+
+                <div class="config-form">
+                    <div class="agencies-list-section">
+                        <h3><i class="fas fa-list"></i> Agências Cadastradas</h3>
+                        <div id="agencies-list" class="agencies-list"></div>
+                    </div>
+
+                    <div class="add-agency-section">
+                        <h3><i class="fas fa-plus-circle"></i> Adicionar Template</h3>
+                        <form id="agency-config-form">
+                            <div class="form-group">
+                                <label for="agency-select-for-template">Para a Agência *</label>
+                                <select id="agency-select-for-template" class="form-select" required></select>
+                            </div>
+                            <div class="form-group" id="new-agency-name-group" style="display: none;">
+                                <label for="new-agency-name">Nome da Nova Agência *</label>
+                                <input type="text" id="new-agency-name" class="form-input" placeholder="Digite o nome da nova agência">
+                            </div>
+                            <div class="form-group">
+                                <label for="pdf-template">Arquivo do Template PDF *</label>
+                                <input type="file" id="pdf-template" accept=".pdf" class="file-input" required>
+                                <div id="pdf-template-status" class="template-status"></div>
+                                <small class="form-help">Selecione o arquivo PDF que servirá de modelo.</small>
+                            </div>
+                            <div class="form-actions" style="justify-content: flex-start; border: none; padding-top: 1rem; margin-top: 0;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Salvar Template
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="navigation-section">
+                        <button id="go-to-vouchers-btn" class="btn btn-success btn-large">
+                            <i class="fas fa-arrow-right"></i> Continuar para Vouchers
+                        </button>
+                        <p class="navigation-help">Após configurar pelo menos uma agência, você pode começar a criar vouchers.</p>
+                    </div>
+                </div>
             </section>
 
-            <section id="voucher-form-screen" class="screen" style="display: none;">
+            <section id="vouchers-list-screen" class="screen vouchers-list-screen">
                 <div class="screen-header">
-                    <button id="back-to-list-btn" class="btn" style="background:rgba(255,255,255,0.2);"><i class="fas fa-arrow-left"></i></button>
-                    <h2 id="voucher-form-title">Emitir Voucher</h2>
-                    <div></div>
+                    <h2><i class="fas fa-ticket-alt"></i> Meus Vouchers</h2>
+                    <button id="new-voucher-btn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Novo Voucher
+                    </button>
+                </div>
+                <div class="vouchers-list-container">
+                    <div id="vouchers-list" class="vouchers-list"></div>
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>Nenhum voucher criado ainda</h3>
+                        <p>Clique em "Novo Voucher" para começar.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="voucher-form-screen" class="screen voucher-form-screen" style="display: none;">
+                <div class="screen-header">
+                    <button id="back-to-list-btn" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="voucher-form-title"><i class="fas fa-plus"></i> Novo Voucher</h2>
+                    <div></div> 
                 </div>
 
-                <form id="voucher-form" class="padding: 2rem;">
+                <form id="voucher-form" class="voucher-form">
                     
-                    <div class="form-section" style="background: linear-gradient(135deg, #f0f4ff, #ffffff); border: 2px solid #818cf8; padding: 25px;">
-                        <h3 style="color: #4f46e5; margin-bottom: 15px;"><i class="fas fa-robot"></i> Copiloto Inteligente</h3>
+                    <div class="form-section ai-upload-section" style="background: linear-gradient(135deg, #eef2ff, #f3e8ff); border: 2px dashed #818cf8; text-align: center; margin-bottom: 2rem;">
+                        <h3 style="color: #4f46e5; justify-content: center;"><i class="fas fa-magic"></i> Assistente Inteligente</h3>
+                        <p style="color: #475569; font-size: 0.9rem; margin-bottom: 1rem;">Envie a foto do voucher, print do WhatsApp ou anotações.</p>
                         
-                        <div class="ai-input-tabs">
-                            <button type="button" class="ai-tab-btn active" onclick="system.switchAiTab('whatsapp')"><i class="fab fa-whatsapp"></i> Texto/WhatsApp</button>
-                            <button type="button" class="ai-tab-btn" onclick="system.switchAiTab('voice')"><i class="fas fa-microphone"></i> Voz</button>
-                            <button type="button" class="ai-tab-btn" onclick="system.switchAiTab('image')"><i class="fas fa-camera"></i> Documento</button>
-                        </div>
+                        <input type="file" id="ai-image-input" accept="image/*" style="display: none;">
+                        
+                        <button type="button" id="trigger-ai-btn" class="btn btn-primary" style="background: #6366f1; border-radius: 50px; padding: 1rem 2rem; margin: 0 auto; display: inline-flex;">
+                            <i class="fas fa-camera"></i> Ler Documento
+                        </button>
 
-                        <div id="ai-tab-whatsapp" class="ai-tab-content active">
-                            <textarea id="ai-raw-text" class="form-textarea" rows="4" placeholder="Cole aqui a conversa do WhatsApp ou os dados brutos..."></textarea>
-                            <button type="button" onclick="system.processAI('text')" class="btn btn-primary" style="width:100%; margin-top:10px;">Extrair do Texto</button>
+                        <div id="ai-loading-main" style="display: none; margin-top: 1rem; color: #4f46e5; font-weight: 600;">
+                            <i class="fas fa-circle-notch fa-spin"></i> O Copiloto está analisando...
                         </div>
-
-                        <div id="ai-tab-voice" class="ai-tab-content text-center">
-                            <p id="voice-status" style="color:#64748b;">Aperte para ditar os dados</p>
-                            <button type="button" id="mic-trigger-btn" onclick="system.toggleVoice()" class="mic-trigger">
-                                <i class="fas fa-microphone"></i>
-                            </button>
-                        </div>
-
-                        <div id="ai-tab-image" class="ai-tab-content text-center">
-                            <div style="border: 2px dashed #cbd5e1; padding: 20px; border-radius: 12px; cursor: pointer;" onclick="document.getElementById('ai-image-input').click()">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400"></i>
-                                <p>Clique para subir Print ou Foto</p>
-                                <input type="file" id="ai-image-input" accept="image/*" style="display: none;" onchange="system.processAI('image')">
+                    </div>
+                    <div class="form-section">
+                        <h3><i class="fas fa-building"></i> Agência e Template</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="selected-agency">Selecione a Agência *</label>
+                                <select id="selected-agency" class="form-select" required>
+                                    <option value="">Selecione uma agência...</option>
+                                </select>
                             </div>
-                        </div>
-
-                        <div id="ai-loading-main" style="display: none; text-align:center; margin-top: 15px; color: #4f46e5; font-weight: 700;">
-                            <i class="fas fa-circle-notch fa-spin"></i> O Copiloto está trabalhando...
+                            <div class="form-group">
+                                <label for="selected-template">Selecione o Template *</label>
+                                <select id="selected-template" class="form-select" required>
+                                    <option value="">Primeiro selecione uma agência...</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <h3><i class="fas fa-user-tie"></i> Dados Principais</h3>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <h3><i class="fas fa-map-marker-alt"></i> Roteiro</h3>
+                        <div class="destination-header">
+                            <label>Destino</label>
+                            <label>Data</label>
+                            <label>Horário</label>
+                        </div>
+                        <div id="destinations-container" class="destinations-container"></div>
+                        <button type="button" id="add-destination-btn" class="btn btn-secondary" style="margin-top: 1rem;">
+                            <i class="fas fa-plus"></i> Adicionar Destino
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-users"></i> Dados da Viagem</h3>
+                        <div class="form-group">
+                            <label for="local_embarque">Local de Embarque</label>
+                            <input type="text" id="local_embarque" class="form-input autocomplete-input" data-field="local_embarque">
+                        </div>
+
+                        <h4>Lista de Passageiros</h4>
+                        <div id="passengers-container" class="passengers-container"></div>
+                        <button type="button" id="add-passenger-btn" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> Adicionar Passageiro
+                        </button>
+
+                        <h4 style="margin-top: 1.5rem;">Contato dos Passageiros</h4>
+                        <div class="passenger-phones-container"></div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-calculator"></i> Quantitativos</h3>
+                        <div class="form-row">
                             <div class="form-group">
-                                <label>Agência</label>
-                                <select id="selected-agency" class="form-select" onchange="system.loadAgencyTemplates()"></select>
+                                <label for="qt_adulto">Adultos</label>
+                                <input type="number" id="qt_adulto" min="0" value="0" class="form-input passenger-count">
                             </div>
                             <div class="form-group">
-                                <label>Template</label>
-                                <select id="selected-template" class="form-select"></select>
+                                <label for="qt_crianca">Crianças (4-9 anos)</label>
+                                <input type="number" id="qt_crianca" min="0" value="0" class="form-input passenger-count">
+                            </div>
+                            <div class="form-group">
+                                <label for="qt_colo">Colos</label>
+                                <input type="number" id="qt_colo" min="0" value="0" class="form-input passenger-count">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label for="total_passageiros">Total de Passageiros</label>
+                            <input type="number" id="total_passageiros" readonly class="form-input total-field">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-dollar-sign"></i> Financeiro e Observações</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="total_a_pagar">Total a Pagar (R$)</label>
+                                <input type="number" id="total_a_pagar" step="0.01" min="0" class="form-input money-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="pre_reserva">Pré-Reserva (R$)</label>
+                                <input type="number" id="pre_reserva" step="0.01" min="0" class="form-input money-input">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nome do Contratante</label>
-                            <input type="text" id="nome_contratante" class="form-input">
+                            <label for="falta_pagar">Falta Pagar (R$)</label>
+                            <input type="number" id="falta_pagar" readonly step="0.01" class="form-input total-field">
                         </div>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group">
-                                <label>WhatsApp Contratante</label>
-                                <div class="phone-input-group" style="display:flex; gap:5px;">
-                                    <input type="text" id="ddi_contratante" value="+55" style="width:60px;" class="form-input">
-                                    <input type="text" id="contato_contratante" class="form-input" style="flex:1;">
+                        <div class="form-group">
+                            <label for="observacao">Observações</label>
+                            <textarea id="observacao" class="form-textarea autocomplete-input" data-field="observacao" rows="4" maxlength="600"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="contractor-header">
+                            <h3><i class="fas fa-user-tie"></i> Dados do Contratante</h3>
+                            <button type="button" id="toggle-contractor-btn" class="btn btn-secondary">Mostrar Campos</button>
+                        </div>
+                        <div id="contractor-fields" class="contractor-fields">
+                            <div class="form-group" style="margin-top: 1.5rem;">
+                                <h4>Exibir no Contrato PDF</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label"><input type="checkbox" id="include-contractor-date" checked> Data do Contrato</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="include-contractor-name" checked> Nome</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="include-contractor-email" checked> E-mail</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="include-contractor-contact" checked> Contato</label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" id="email_contratante" class="form-input">
+                                <label for="data_contrato">Data do Contrato</label>
+                                <input type="date" id="data_contrato" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="nome_contratante">Nome do Contratante</label>
+                                <input type="text" id="nome_contratante" class="form-input autocomplete-input" data-field="nome_contratante">
+                            </div>
+                            <div class="form-group">
+                                <label for="contato_contratante">Contato do Contratante</label>
+                                <div class="phone-input-group">
+                                    <input type="tel" id="contato_contratante" class="form-input phone-input autocomplete-input" data-field="contato_contratante" placeholder="(00) 00000-0000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email_contratante">Email do Contratante</label>
+                                <input type="email" id="email_contratante" class="form-input autocomplete-input" data-field="email_contratante">
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-section">
-                        <h3><i class="fas fa-map-marked-alt"></i> Roteiro de Viagem</h3>
-                        <div id="destinations-container"></div>
-                        <button type="button" onclick="system.addDestination()" class="btn btn-secondary btn-small"><i class="fas fa-plus"></i> Add Destino</button>
-                    </div>
-
-                    <div class="form-section">
-                        <h3><i class="fas fa-users"></i> Passageiros</h3>
-                        <div id="passengers-container"></div>
-                        <button type="button" onclick="system.addPassenger()" class="btn btn-secondary btn-small"><i class="fas fa-plus"></i> Add Passageiro</button>
-                    </div>
-
-                    <div class="form-section">
-                        <h3><i class="fas fa-calculator"></i> Financeiro</h3>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-                            <div class="form-group"><label>Adultos</label><input type="number" id="qt_adulto" class="form-input"></div>
-                            <div class="form-group"><label>Crianças</label><input type="number" id="qt_crianca" class="form-input"></div>
-                            <div class="form-group"><label>Colo</label><input type="number" id="qt_colo" class="form-input"></div>
-                        </div>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group"><label>Total R$</label><input type="text" id="total_a_pagar" class="form-input" style="font-weight:bold; color:#10b981;"></div>
-                            <div class="form-group"><label>Pré-Reserva R$</label><input type="text" id="pre_reserva" class="form-input"></div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions" style="display: flex; gap: 15px;">
-                        <button type="button" onclick="system.generatePDF()" class="btn btn-primary" style="flex: 2;"><i class="fas fa-file-pdf"></i> GERAR PDF FINAL</button>
-                        <button type="button" onclick="system.saveVoucher()" class="btn btn-success" style="flex: 1;"><i class="fas fa-save"></i> SALVAR</button>
+                    <div class="form-actions">
+                        <button type="button" id="preview-pdf-btn" class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Visualizar PDF
+                        </button>
+                        <button type="button" id="save-voucher-btn" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar Voucher
+                        </button>
                     </div>
                 </form>
             </section>
@@ -203,191 +575,1357 @@
     <div id="ai-assistant-modal" class="ai-modal">
         <div class="ai-modal-content">
             <div class="ai-modal-header">
-                <h3><i class="fas fa-robot"></i> Ajuste do Copiloto</h3>
-                <button type="button" onclick="system.closeAIModal()">&times;</button>
+                <h3><i class="fas fa-robot"></i> Copiloto</h3>
+                <button type="button" id="close-ai-modal">&times;</button>
             </div>
-            <div class="ai-modal-body" style="padding: 20px;">
-                <div id="ai-message" class="padding: 10px; background:#eef2ff; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #4f46e5;"></div>
-                <div id="ai-data-summary" style="font-size: 0.9rem; background:#f8fafc; padding:15px; border-radius:10px;"></div>
-            </div>
-            <div class="ai-modal-footer" style="padding: 20px; border-top: 1px solid #eee;">
-                <div style="display:flex; gap:10px; margin-bottom: 15px;">
-                    <input type="text" id="ai-refine-text" class="form-input" placeholder="Diga: 'Mude a data' ou 'Adicione João'...">
-                    <button type="button" onclick="system.refineAI()" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+            
+            <div class="ai-modal-body" id="ai-modal-body">
+                <div id="ai-message" class="ai-message">Olá! Estou analisando...</div>
+                
+                <div id="ai-missing-fields" class="ai-missing-fields" style="display: none;">
+                    <strong>Falta preencher:</strong> <br>
+                    <div id="ai-missing-tags"></div>
                 </div>
-                <button type="button" onclick="system.approveAIData()" class="btn btn-success" style="width:100%;">TUDO CERTO, PREENCHER!</button>
+
+                <div class="ai-summary" id="ai-data-summary">
+                    </div>
+            </div>
+
+            <div id="ai-processing-chat" class="ai-processing">
+                <i class="fas fa-circle-notch fa-spin"></i> Atualizando dados...
+            </div>
+
+            <div class="ai-modal-footer">
+                <div class="ai-input-group">
+                    <button type="button" id="ai-mic-btn" class="ai-mic-btn" title="Falar correção"><i class="fas fa-microphone"></i></button>
+                    <input type="text" id="ai-text-input" placeholder="Ex: Adiciona 1 colo e altera destino pra Canoa...">
+                    <button type="button" id="ai-send-btn" class="btn btn-primary" style="padding: 0.8rem;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <button type="button" id="ai-approve-btn" class="btn btn-success" style="width: 100%; padding: 1rem;">
+                    <i class="fas fa-check-circle"></i> Tudo Certo! Preencher Formulário
+                </button>
             </div>
         </div>
     </div>
 
+    <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/libphonenumber-js@1.11.4/bundle/libphonenumber-js.min.js"></script>
+
+    <script>
+        window.COUNTRIES_DATA = [
+            { code: 'BR', name: 'Brasil', dialCode: '55' },
+            { code: 'AR', name: 'Argentina', dialCode: '54' },
+            { code: 'PY', name: 'Paraguai', dialCode: '595' },
+            { code: 'UY', name: 'Uruguai', dialCode: '598' },
+            { code: 'CL', name: 'Chile', dialCode: '56' },
+            { code: 'PE', name: 'Peru', dialCode: '51' },
+            { code: 'BO', name: 'Bolívia', dialCode: '591' },
+            { code: 'CO', name: 'Colômbia', dialCode: '57' },
+            { code: 'VE', name: 'Venezuela', dialCode: '58' },
+            { code: 'EC', name: 'Equador', dialCode: '593' },
+            { code: 'US', name: 'Estados Unidos', dialCode: '1' },
+            { code: 'PT', name: 'Portugal', dialCode: '351' }
+        ];
+    </script>
 
     <script>
         class VoucherSystem {
             constructor() {
-                this.vouchers = JSON.parse(localStorage.getItem('vouchers') || '[]');
-                this.agencies = JSON.parse(localStorage.getItem('agencies') || '[]');
-                this.currentAIData = null;
+                this.editingVoucherId = null;
+                this.autocompleteData = this.loadAutocompleteData();
+                this.countriesData = this.getCountriesData();
+                this.currentAIBody = null; // Armazena o rascunho do Assistente IA
                 this.recognition = null;
                 this.init();
             }
 
+            getCountriesData() { return window.COUNTRIES_DATA || [{ code: 'BR', name: 'Brasil', dialCode: '55' }]; }
+
             init() {
+                this.setupEventListeners();
+                this.setupVoiceRecognition();
+                this.loadApp();
+                this.setupAutocomplete();
+                this.setupFormCalculations();
+            }
+
+            // ==========================================
+            // CÉREBRO DA IA (NOVO FLUXO DO ASSISTENTE)
+            // ==========================================
+            
+            async processAIUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const btn = document.getElementById('trigger-ai-btn');
+                const loading = document.getElementById('ai-loading-main');
+                
+                btn.style.display = 'none';
+                loading.style.display = 'block';
+
+                try {
+                    const base64Image = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+
+                    // ATENÇÃO: Confirme se este link da Vercel é o exato gerado para você
+                    const response = await fetch('https://voucher-ai-api.vercel.app/api/extrair-voucher', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            imageBase64: base64Image,
+                            mimeType: file.type
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erro na comunicação com a API da Vercel.');
+
+                    const aiResponse = await response.json();
+                    this.currentAIBody = aiResponse;
+                    this.openAIModal();
+
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Falha ao processar a imagem. O servidor está rodando?');
+                } finally {
+                    btn.style.display = 'inline-flex';
+                    loading.style.display = 'none';
+                    event.target.value = ''; 
+                }
+            }
+
+            async sendAICorrection() {
+                const inputEl = document.getElementById('ai-text-input');
+                const text = inputEl.value.trim();
+                if (!text || !this.currentAIBody) return;
+
+                const chatLoading = document.getElementById('ai-processing-chat');
+                const footer = document.querySelector('.ai-modal-footer');
+                
+                chatLoading.style.display = 'block';
+                footer.style.opacity = '0.5';
+                footer.style.pointerEvents = 'none';
+
+                try {
+                    const response = await fetch('https://voucher-ai-api.vercel.app/api/corrigir-voucher', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            dadosAtuais: this.currentAIBody.dados,
+                            instrucaoUsuario: text
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erro na correção.');
+
+                    const newAiResponse = await response.json();
+                    this.currentAIBody = newAiResponse;
+                    inputEl.value = '';
+                    this.updateAIModalUI();
+
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Não foi possível aplicar a correção.');
+                } finally {
+                    chatLoading.style.display = 'none';
+                    footer.style.opacity = '1';
+                    footer.style.pointerEvents = 'auto';
+                }
+            }
+
+            openAIModal() {
+                document.getElementById('ai-assistant-modal').style.display = 'flex';
+                this.updateAIModalUI();
+            }
+
+            closeAIModal() {
+                document.getElementById('ai-assistant-modal').style.display = 'none';
+            }
+
+            updateAIModalUI() {
+                if (!this.currentAIBody) return;
+
+                const data = this.currentAIBody;
+                const d = data.dados;
+
+                // 1. Atualiza Mensagem
+                document.getElementById('ai-message').innerText = data.mensagem_assistente || "Aqui está o que encontrei:";
+
+                // 2. Trata os campos faltando
+                const missingContainer = document.getElementById('ai-missing-fields');
+                const missingTags = document.getElementById('ai-missing-tags');
+                
+                if (data.status === "incompleto" && data.campos_faltando && data.campos_faltando.length > 0) {
+                    missingContainer.style.display = 'block';
+                    missingTags.innerHTML = data.campos_faltando.map(campo => `<span><i class="fas fa-exclamation-triangle"></i> ${campo}</span>`).join('');
+                } else {
+                    missingContainer.style.display = 'none';
+                }
+
+                // 3. Monta o Sumário
+                let destinosHtml = (d.destinos && d.destinos.length > 0) 
+                    ? d.destinos.map(x => `${x.destination} (${x.date || 'sem data'})`).join(' | ') 
+                    : 'Nenhum identificado';
+
+                let paxHtml = (d.passengers && d.passengers.length > 0)
+                    ? d.passengers.join(', ')
+                    : 'Nenhum identificado';
+
+                const summaryHtml = `
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-user"></i> Contratante:</strong> ${d.nome_contratante || '---'}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-phone"></i> Contato:</strong> ${d.contato_contratante || '---'}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-map-marker-alt"></i> Destino:</strong> ${destinosHtml}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-users"></i> Quantidades:</strong> ${d.qt_adulto || 0} Adultos | ${d.qt_crianca || 0} Crianças | ${d.qt_colo || 0} Colos</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-list"></i> Passageiros:</strong> ${paxHtml}</div>
+                    <div style="margin-bottom: 0.5rem;"><strong><i class="fas fa-dollar-sign"></i> Total:</strong> R$ ${parseFloat(d.total_a_pagar || 0).toFixed(2)}</div>
+                `;
+                document.getElementById('ai-data-summary').innerHTML = summaryHtml;
+
+                // Rola para o fim se for uma mensagem nova
+                const body = document.getElementById('ai-modal-body');
+                body.scrollTop = body.scrollHeight;
+            }
+
+            approveAIData() {
+                if (!this.currentAIBody) return;
+                const d = this.currentAIBody.dados;
+
+                try {
+                    // Preenche campos simples
+                    if (d.nome_contratante) document.getElementById('nome_contratante').value = d.nome_contratante;
+                    if (d.email_contratante) document.getElementById('email_contratante').value = d.email_contratante;
+                    if (d.local_embarque) document.getElementById('local_embarque').value = d.local_embarque;
+                    if (d.qt_adulto !== undefined) document.getElementById('qt_adulto').value = d.qt_adulto;
+                    if (d.qt_crianca !== undefined) document.getElementById('qt_crianca').value = d.qt_crianca;
+                    if (d.qt_colo !== undefined) document.getElementById('qt_colo').value = d.qt_colo;
+                    if (d.total_a_pagar !== undefined) document.getElementById('total_a_pagar').value = d.total_a_pagar;
+                    if (d.pre_reserva !== undefined) document.getElementById('pre_reserva').value = d.pre_reserva;
+
+                    if (d.contato_contratante) this.populatePhoneField('contato_contratante', d.contato_contratante);
+
+                    if (d.destinos && d.destinos.length > 0) {
+                        this.clearDestinations();
+                        d.destinos.forEach(dest => this.addDestination(dest));
+                    }
+
+                    if (d.passengers && d.passengers.length > 0) {
+                        this.clearPassengers();
+                        d.passengers.forEach(pax => this.addPassenger(pax));
+                    }
+
+                    this.calculateTotalPassengers();
+                    this.calculateRemainingAmount();
+                    
+                    const contractorFields = document.getElementById('contractor-fields');
+                    if (d.nome_contratante && !contractorFields.classList.contains('show')) {
+                        this.toggleContractorFields();
+                    }
+                    
+                    this.closeAIModal();
+                    this.showSuccessMessage('Campos preenchidos! Você pode gerar o PDF.');
+                } catch (error) {
+                    console.error(error);
+                    this.showErrorMessage('Erro ao transferir dados da IA para o formulário.');
+                }
+            }
+
+            setupVoiceRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    console.warn('Reconhecimento de voz não suportado neste navegador.');
+                    document.getElementById('ai-mic-btn').style.display = 'none';
+                    return;
+                }
+                
+                this.recognition = new SpeechRecognition();
+                this.recognition.lang = 'pt-BR';
+                this.recognition.interimResults = false;
+                
+                const micBtn = document.getElementById('ai-mic-btn');
+                const textInput = document.getElementById('ai-text-input');
+
+                micBtn.addEventListener('click', () => {
+                    if (micBtn.classList.contains('recording')) {
+                        this.recognition.stop();
+                    } else {
+                        try {
+                            this.recognition.start();
+                            micBtn.classList.add('recording');
+                            textInput.placeholder = 'Ouvindo...';
+                        } catch(e) { console.error("Erro no microfone:", e); }
+                    }
+                });
+
+                this.recognition.addEventListener('result', (e) => {
+                    const transcript = e.results[0][0].transcript;
+                    textInput.value = transcript;
+                    this.sendAICorrection(); // Envia automaticamente após terminar de falar
+                });
+
+                this.recognition.addEventListener('end', () => {
+                    micBtn.classList.remove('recording');
+                    textInput.placeholder = 'Ex: Adiciona 1 colo e altera destino...';
+                });
+            }
+
+            // ==========================================
+            // ROTINAS NORMAIS DO SISTEMA
+            // ==========================================
+
+            getCombinedPhoneNumber(inputId) {
+                const phoneInput = document.getElementById(inputId);
+                if (!phoneInput) return '';
+                const group = phoneInput.closest('.phone-input-group');
+                const countryInput = group ? group.querySelector('.country-input') : null;
+                if (countryInput && phoneInput.value) {
+                    return `${countryInput.value} ${phoneInput.value}`.trim();
+                }
+                return phoneInput.value;
+            }
+
+            parsePhoneNumber(fullNumber) {
+                if (!fullNumber || typeof fullNumber !== 'string') return { ddi: '+55', number: '' };
+                const trimmed = fullNumber.trim();
+                const parts = trimmed.split(' ');
+                if (parts.length === 1 && parts[0].startsWith('+')) return { ddi: parts[0], number: '' };
+                if (parts.length > 1 && parts[0].startsWith('+')) {
+                    const ddi = parts[0];
+                    const number = parts.slice(1).join(' ');
+                    return { ddi, number };
+                }
+                return { ddi: '+55', number: fullNumber };
+            }
+
+            populatePhoneField(inputId, fullNumber) {
+                const phoneInput = document.getElementById(inputId);
+                if (!phoneInput) return;
+                const { ddi, number } = this.parsePhoneNumber(fullNumber);
+                phoneInput.value = number;
+                const group = phoneInput.closest('.phone-input-group');
+                const countryInput = group.querySelector('.country-input');
+                if (countryInput) {
+                    countryInput.value = ddi || '+55';
+                    const country = this.countriesData.find(c => `+${c.dialCode}` === countryInput.value) || this.countriesData.find(c => c.code === 'BR');
+                    if (country) {
+                        countryInput.setAttribute('data-country-code', country.code);
+                        this.setupPhoneInputForCountry(phoneInput, country.code);
+                    }
+                }
+            }
+
+            loadApp() {
                 setTimeout(() => {
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('app').style.display = 'flex';
-                }, 1000);
-                this.setupVoice();
+                    this.showVouchersListScreen();
+                }, 1500);
             }
 
-            // NAVEGAÇÃO DE TELAS
-            switchAiTab(tab) {
-                document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
-                event.target.classList.add('active');
-                document.getElementById('ai-tab-' + tab).classList.add('active');
-            }
-
-            // MOTOR DE IA MULTIMODAL
-            async processAI(type) {
-                document.getElementById('ai-loading-main').style.display = 'block';
-                try {
-                    let url = "https://voucher-ai-api.vercel.app/api";
-                    let payload = {};
-
-                    if (type === 'text') {
-                        url += "/processar-texto";
-                        payload = { texto: document.getElementById('ai-raw-text').value };
-                    } else {
-                        url += "/extrair-voucher";
-                        const file = document.getElementById('ai-image-input').files[0];
-                        const base64 = await this.toBase64(file);
-                        payload = { imageBase64: base64, mimeType: file.type };
+            setupEventListeners() {
+                document.getElementById('config-btn').addEventListener('click', () => this.showConfigScreen());
+                document.getElementById('new-voucher-btn').addEventListener('click', () => this.showVoucherFormScreen());
+                document.getElementById('back-to-list-btn').addEventListener('click', () => this.showVouchersListScreen());
+                document.getElementById('go-to-vouchers-btn').addEventListener('click', () => {
+                    const agencies = this.getAllAgencies();
+                    if (agencies.length === 0) {
+                        this.showErrorMessage('Configure pelo menos uma agência antes de continuar.');
+                        return;
                     }
+                    this.showVouchersListScreen();
+                });
+                
+                document.getElementById('agency-config-form').addEventListener('submit', this.saveAgencyConfig.bind(this));
+                document.getElementById('pdf-template').addEventListener('change', (e) => this.handlePDFTemplateUpload(e));
+                document.getElementById('selected-agency').addEventListener('change', (e) => this.loadTemplatesForAgency(e.target.value));
+                document.getElementById('selected-template').addEventListener('change', (e) => this.selectTemplate(e.target.value));
+                document.getElementById('toggle-contractor-btn').addEventListener('click', () => this.toggleContractorFields());
+                document.getElementById('save-voucher-btn').addEventListener('click', () => this.saveVoucher());
+                document.getElementById('preview-pdf-btn').addEventListener('click', () => this.generatePDF());
+                document.getElementById('add-destination-btn').addEventListener('click', () => this.addDestination());
+                document.getElementById('add-passenger-btn').addEventListener('click', () => this.addPassenger());
+                
+                document.querySelectorAll('.passenger-count').forEach(input => {
+                    input.addEventListener('input', () => this.calculateTotalPassengers());
+                });
+                document.querySelectorAll('.money-input').forEach(input => {
+                    input.addEventListener('input', () => this.calculateRemainingAmount());
+                });
+                
+                document.getElementById('observacao').addEventListener('input', this.handleObservacaoInput.bind(this));
+                
+                const today = new Date();
+                const todayISO = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+                document.getElementById('data_contrato').value = todayISO;
 
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+                // Eventos do Assistente IA
+                document.getElementById('trigger-ai-btn')?.addEventListener('click', () => document.getElementById('ai-image-input').click());
+                document.getElementById('ai-image-input')?.addEventListener('change', (e) => this.processAIUpload(e));
+                document.getElementById('close-ai-modal')?.addEventListener('click', () => this.closeAIModal());
+                document.getElementById('ai-approve-btn')?.addEventListener('click', () => this.approveAIData());
+                document.getElementById('ai-send-btn')?.addEventListener('click', () => this.sendAICorrection());
+                
+                // Enviar texto da IA com a tecla "Enter"
+                document.getElementById('ai-text-input')?.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendAICorrection();
+                });
+            }
 
-                    this.currentAIData = await response.json();
-                    this.openAIModal();
-                } catch (e) {
-                    alert("Erro na IA: " + e.message);
-                } finally {
-                    document.getElementById('ai-loading-main').style.display = 'none';
+            handleObservacaoInput(e) {
+                const textarea = e.target;
+                const maxCharsPerLine = 120;
+                const value = textarea.value;
+                const lines = value.split('\n');
+                const newLines = lines.map(line => {
+                    return line.substring(0, maxCharsPerLine);
+                });
+                const finalValue = newLines.join('\n');
+                if (textarea.value !== finalValue) {
+                    const selectionStart = textarea.selectionStart;
+                    const selectionEnd = textarea.selectionEnd;
+                    textarea.value = finalValue;
+                    textarea.setSelectionRange(Math.min(selectionStart, finalValue.length), Math.min(selectionEnd, finalValue.length));
                 }
             }
 
-            // LÓGICA DE VOZ (ED, É SÓ FALAR!)
-            setupVoice() {
-                const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!Speech) return;
-                this.recognition = new Speech();
-                this.recognition.lang = 'pt-BR';
-                this.recognition.onresult = (e) => {
-                    const text = e.results[0][0].transcript;
-                    document.getElementById('ai-raw-text').value = text;
-                    this.processAI('text');
+            populateCountrySelectors() {
+                const containers = [...document.querySelectorAll('.passenger-phones-container'), document.getElementById('contractor-fields')];
+                containers.forEach(container => {
+                    if (!container) return;
+                    const phoneInputGroups = container.querySelectorAll('.phone-input-group');
+                    phoneInputGroups.forEach(group => {
+                        if (group.querySelector('.country-input-container')) return;
+                        const phoneInput = group.querySelector('.phone-input');
+                        if (!phoneInput) return;
+                        const inputContainer = document.createElement('div');
+                        inputContainer.className = 'country-input-container';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.className = 'country-input';
+                        input.id = `country-select-${phoneInput.id}`;
+                        input.value = '+55';
+                        input.placeholder = 'DDI';
+                        input.setAttribute('data-country-code', 'BR');
+                        const dropdown = document.createElement('div');
+                        dropdown.className = 'country-dropdown';
+                        dropdown.style.display = 'none';
+                        inputContainer.appendChild(input);
+                        inputContainer.appendChild(dropdown);
+                        group.prepend(inputContainer);
+                        this.setupCountrySearch(input, dropdown, phoneInput);
+                    });
+                });
+            }
+
+            setupCountrySearch(input, dropdown, phoneInput) {
+                input.addEventListener('focus', () => this.showCountryDropdown(input, dropdown, ''));
+                input.addEventListener('input', (e) => this.showCountryDropdown(input, dropdown, e.target.value));
+                input.addEventListener('blur', () => setTimeout(() => dropdown.style.display = 'none', 200));
+                this.setupPhoneInputForCountry(phoneInput, 'BR');
+            }
+
+            showCountryDropdown(input, dropdown, query) {
+                const filteredCountries = this.filterCountries(query);
+                dropdown.innerHTML = '';
+                filteredCountries.forEach(country => {
+                    const item = document.createElement('div');
+                    item.className = 'country-dropdown-item';
+                    item.innerHTML = `<span class="country-name">${country.name}</span> <span class="country-code">+${country.dialCode}</span>`;
+                    item.addEventListener('click', () => {
+                        this.selectCountry(input, country);
+                        dropdown.style.display = 'none';
+                        const phoneInput = input.closest('.phone-input-group').querySelector('.phone-input');
+                        if (phoneInput) this.setupPhoneInputForCountry(phoneInput, country.code);
+                    });
+                    dropdown.appendChild(item);
+                });
+                dropdown.style.display = filteredCountries.length > 0 ? 'block' : 'none';
+            }
+
+            filterCountries(query) {
+                if (!query) return this.countriesData;
+                const lowerQuery = query.toLowerCase().replace('+', '');
+                return this.countriesData.filter(country => country.name.toLowerCase().includes(lowerQuery) || country.dialCode.includes(lowerQuery) || country.code.toLowerCase().includes(lowerQuery));
+            }
+
+            selectCountry(input, country) {
+                input.value = `+${country.dialCode}`;
+                input.setAttribute('data-country-code', country.code);
+            }
+
+            setupPhoneInputForCountry(phoneInput, countryCode) {
+                if (!phoneInput) return;
+                const currentValue = phoneInput.value;
+                const newPhoneInput = phoneInput.cloneNode(true);
+                phoneInput.parentNode.replaceChild(newPhoneInput, phoneInput);
+                newPhoneInput.value = currentValue;
+                const countryConfig = this.getCountryPhoneConfig(countryCode);
+                newPhoneInput.maxLength = countryConfig.maxLength;
+                newPhoneInput.addEventListener('input', (e) => {
+                    if (typeof libphonenumber === 'undefined') return;
+                    let value = e.target.value.replace(/[^0-9\s\(\)\-]/g, '');
+                    const asYouType = new libphonenumber.AsYouType(countryCode);
+                    const formatted = asYouType.input(value);
+                    if (formatted.length <= countryConfig.maxLength) {
+                        e.target.value = formatted;
+                    } else {
+                        e.target.value = formatted.substring(0, countryConfig.maxLength);
+                    }
+                });
+                newPhoneInput.addEventListener('blur', (e) => {
+                    this.validateMobileNumber(e.target, countryCode);
+                });
+                this.updatePlaceholderForCountry(newPhoneInput, countryCode);
+            }
+
+            validateMobileNumber(phoneInput, countryCode) {
+                if (typeof libphonenumber === 'undefined' || !phoneInput.value) {
+                    phoneInput.classList.remove('error', 'warning', 'valid');
+                    phoneInput.title = '';
+                    return;
+                };
+                try {
+                    const phoneNumber = libphonenumber.parsePhoneNumberFromString(phoneInput.value, countryCode);
+                    phoneInput.classList.remove('error', 'warning', 'valid');
+                    if (phoneNumber && phoneNumber.isValid()) {
+                        const type = phoneNumber.getType();
+                        if (type === 'MOBILE') {
+                            phoneInput.classList.add('valid');
+                            phoneInput.title = 'Número de celular válido ✓';
+                        } else if (type === 'FIXED_LINE_OR_MOBILE') {
+                            phoneInput.classList.add('warning');
+                            phoneInput.title = 'Verifique se este é um número de celular.';
+                        } else {
+                            phoneInput.classList.add('error');
+                            phoneInput.title = 'Por favor, insira apenas números de celular.';
+                        }
+                    } else {
+                        phoneInput.classList.add('error');
+                        phoneInput.title = 'Número inválido.';
+                    }
+                } catch (error) {
+                    phoneInput.classList.remove('warning', 'valid');
+                    phoneInput.classList.add('error');
+                    phoneInput.title = 'Formato inválido.';
+                }
+            }
+
+            getCountryPhoneConfig(countryCode) {
+                const configs = {
+                    'BR': { maxLength: 15, example: '(11) 99999-9999', minLength: 10 },
+                    'US': { maxLength: 14, example: '(555) 123-4567', minLength: 10 },
+                    'PT': { maxLength: 13, example: '912 345 678', minLength: 9 }
+                };
+                return configs[countryCode] || { maxLength: 15, example: 'Número de celular', minLength: 8 };
+            }
+
+            updatePlaceholderForCountry(phoneInput, countryCode) {
+                const config = this.getCountryPhoneConfig(countryCode);
+                phoneInput.placeholder = config.example;
+            }
+
+            toggleContractorFields() {
+                const contractorFields = document.getElementById('contractor-fields');
+                const toggleBtn = document.getElementById('toggle-contractor-btn');
+                const isHidden = !contractorFields.classList.contains('show');
+                if (isHidden) {
+                    contractorFields.classList.add('show');
+                    toggleBtn.textContent = 'Ocultar Campos';
+                } else {
+                    contractorFields.classList.remove('show');
+                    toggleBtn.textContent = 'Mostrar Campos';
+                }
+            }
+
+            showConfigScreen() {
+                this.hideAllScreens();
+                document.getElementById('config-screen').style.display = 'block';
+                this.loadAgencyConfig();
+            }
+
+            showVouchersListScreen() {
+                this.hideAllScreens();
+                document.getElementById('vouchers-list-screen').style.display = 'block';
+                this.loadVouchersList();
+            }
+
+            showVoucherFormScreen(voucherId = null) {
+                this.hideAllScreens();
+                document.getElementById('voucher-form-screen').style.display = 'block';
+                this.loadAgencyOptions();
+                this.populateCountrySelectors();
+                if (voucherId) {
+                    this.editingVoucherId = voucherId;
+                    document.getElementById('voucher-form-title').innerHTML = '<i class="fas fa-edit"></i> Editar Voucher';
+                    setTimeout(() => this.loadVoucherForEdit(voucherId), 100);
+                } else {
+                    this.editingVoucherId = null;
+                    document.getElementById('voucher-form-title').innerHTML = '<i class="fas fa-plus"></i> Novo Voucher';
+                    this.resetVoucherForm();
+                }
+            }
+
+            hideAllScreens() {
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.style.display = 'none';
+                });
+            }
+
+            populateAgencySelect() {
+                const select = document.getElementById('agency-select-for-template');
+                if (!select) return;
+                const agencies = this.getAllAgencies();
+                select.innerHTML = '<option value="">Selecione uma agência...</option>';
+                agencies.forEach(agency => {
+                    const option = document.createElement('option');
+                    option.value = agency.id;
+                    option.textContent = agency.name;
+                    select.appendChild(option);
+                });
+                select.innerHTML += '<option value="new">-- Adicionar Nova Agência --</option>';
+                select.addEventListener('change', (e) => {
+                    const newAgencyGroup = document.getElementById('new-agency-name-group');
+                    const newAgencyInput = document.getElementById('new-agency-name');
+                    if (e.target.value === 'new') {
+                        newAgencyGroup.style.display = 'block';
+                        newAgencyInput.required = true;
+                    } else {
+                        newAgencyGroup.style.display = 'none';
+                        newAgencyInput.required = false;
+                        newAgencyInput.value = '';
+                    }
+                });
+            }
+
+            async saveAgencyConfig(e) {
+                e.preventDefault();
+                const agencySelect = document.getElementById('agency-select-for-template');
+                const selectedAgencyId = agencySelect.value;
+                const templateFile = document.getElementById('pdf-template').files[0];
+                if (!selectedAgencyId) {
+                    this.showErrorMessage('Por favor, selecione uma agência ou a opção para adicionar uma nova.');
+                    return;
+                }
+                if (!templateFile) {
+                    this.showErrorMessage('Por favor, selecione um arquivo de template PDF.');
+                    return;
+                }
+                let agencyIdentifier;
+                if (selectedAgencyId === 'new') {
+                    agencyIdentifier = document.getElementById('new-agency-name').value.trim();
+                    if (!agencyIdentifier) {
+                        this.showErrorMessage('Por favor, digite o nome da nova agência.');
+                        return;
+                    }
+                } else {
+                    agencyIdentifier = selectedAgencyId;
+                }
+                this.saveAgencyWithTemplate(agencyIdentifier, templateFile);
+            }
+
+            async saveAgencyWithTemplate(agencyIdentifier, templateFile) {
+                try {
+                    const arrayBuffer = await templateFile.arrayBuffer();
+                    const base64String = this.arrayBufferToBase64(arrayBuffer);
+                    const templateData = { name: templateFile.name, data: base64String };
+                    const agencies = this.getAllAgencies();
+                    let agencyToUpdate = agencies.find(a => a.id === agencyIdentifier || a.name === agencyIdentifier);
+                    if (agencyToUpdate) {
+                        agencyToUpdate.templates.push(templateData);
+                        this.showSuccessMessage(`Template adicionado à agência "${agencyToUpdate.name}"!`);
+                    } else {
+                        const newAgency = { id: this.generateId(), name: agencyIdentifier, templates: [templateData] };
+                        agencies.push(newAgency);
+                        this.showSuccessMessage(`Agência "${newAgency.name}" criada com sucesso!`);
+                    }
+                    localStorage.setItem('agencies', JSON.stringify(agencies));
+                    document.getElementById('agency-config-form').reset();
+                    document.getElementById('pdf-template-status').innerHTML = '';
+                    document.getElementById('pdf-template-status').className = 'template-status';
+                    document.getElementById('new-agency-name-group').style.display = 'none';
+                    this.loadAgenciesList();
+                    this.populateAgencySelect();
+                    this.loadAgencyOptions();
+                } catch (error) {
+                    this.showErrorMessage('Erro ao salvar agência e template.');
+                }
+            }
+
+            getAllAgencies() {
+                const agencies = localStorage.getItem('agencies');
+                return agencies ? JSON.parse(agencies) : [];
+            }
+
+            loadAgencyOptions() {
+                const agencies = this.getAllAgencies();
+                const select = document.getElementById('selected-agency');
+                if (!select) return;
+                select.innerHTML = '<option value="">Selecione uma agência...</option>';
+                agencies.forEach(agency => {
+                    const option = document.createElement('option');
+                    option.value = agency.id;
+                    option.textContent = agency.name;
+                    select.appendChild(option);
+                });
+            }
+
+            loadTemplatesForAgency(agencyId) {
+                const agencies = this.getAllAgencies();
+                const agency = agencies.find(a => a.id === agencyId);
+                const templateSelect = document.getElementById('selected-template');
+                if (!templateSelect) return;
+                templateSelect.innerHTML = '<option value="">Selecione um template...</option>';
+                if (agency && agency.templates) {
+                    agency.templates.forEach((template, index) => {
+                        const option = document.createElement('option');
+                        option.value = `${agencyId}-${index}`;
+                        option.textContent = template.name;
+                        templateSelect.appendChild(option);
+                    });
+                    if (agency.templates.length > 0) {
+                        templateSelect.value = `${agencyId}-0`;
+                        this.selectTemplate(templateSelect.value);
+                    }
+                }
+            }
+
+            selectTemplate(templateId) {
+                if (!templateId) {
+                    this.currentTemplate = null;
+                    return;
+                }
+                const [agencyId, templateIndex] = templateId.split('-');
+                const agencies = this.getAllAgencies();
+                const agency = agencies.find(a => a.id === agencyId);
+                if (agency && agency.templates[templateIndex]) {
+                    this.currentTemplate = { agency, template: agency.templates[templateIndex] };
+                }
+            }
+
+            loadAgencyConfig() {
+                this.loadAgenciesList();
+                this.populateAgencySelect();
+            }
+
+            loadAgenciesList() {
+                const agenciesList = document.getElementById('agencies-list');
+                if (!agenciesList) return;
+                const agencies = this.getAllAgencies();
+                if (agencies.length === 0) {
+                    agenciesList.innerHTML = '<div class="empty-agencies">Nenhuma agência cadastrada ainda.</div>';
+                    return;
+                }
+                agenciesList.innerHTML = agencies.map(agency => `
+                <div class="agency-item">
+                    <div class="agency-item-header">
+                         <div class="agency-info"><div class="agency-name">${agency.name}</div></div>
+                        <div class="agency-actions">
+                            <button class="btn btn-danger btn-small remove-agency-btn" data-agency-id="${agency.id}">
+                                <i class="fa fa-trash"></i> Remover Agência
+                            </button>
+                        </div>
+                    </div>
+                    <div class="templates-list">
+                        ${(agency.templates && agency.templates.length > 0) ?
+                        agency.templates.map((template, index) => `
+                        <div class="template-item">
+                            <span class="template-name"><i class="fas fa-file-pdf"></i> ${template.name}</span>
+                            <button class="remove-template-btn" data-agency-id="${agency.id}" data-template-index="${index}" title="Remover este template">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>`).join('') : '<p class="empty-agencies" style="padding: 0.5rem 0; text-align: left;">Nenhum template adicionado.</p>'}
+                    </div>
+                </div>`).join('');
+                agenciesList.querySelectorAll('.remove-agency-btn').forEach(button => {
+                    button.addEventListener('click', (e) => this.removeAgency(e.currentTarget.getAttribute('data-agency-id')));
+                });
+                agenciesList.querySelectorAll('.remove-template-btn').forEach(button => {
+                    button.addEventListener('click', (e) => this.removeTemplate(e.currentTarget.getAttribute('data-agency-id'), parseInt(e.currentTarget.getAttribute('data-template-index'), 10)));
+                });
+            }
+
+            removeAgency(agencyId) {
+                try {
+                    let agencies = this.getAllAgencies();
+                    agencies = agencies.filter(agency => agency.id !== agencyId);
+                    localStorage.setItem('agencies', JSON.stringify(agencies));
+                    this.showSuccessMessage('Agência removida com sucesso!');
+                    this.loadAgenciesList();
+                    this.populateAgencySelect();
+                    this.loadAgencyOptions();
+                } catch (error) {
+                    this.showErrorMessage('Erro ao remover agência.');
+                }
+            }
+
+            removeTemplate(agencyId, templateIndex) {
+                try {
+                    let agencies = this.getAllAgencies();
+                    const agency = agencies.find(a => a.id === agencyId);
+                    if (agency && agency.templates[templateIndex]) {
+                        agency.templates.splice(templateIndex, 1);
+                        localStorage.setItem('agencies', JSON.stringify(agencies));
+                        this.showSuccessMessage('Template removido com sucesso!');
+                        this.loadAgenciesList();
+                        this.populateAgencySelect();
+                        this.loadAgencyOptions();
+                    } else {
+                        this.showErrorMessage('Não foi possível encontrar o template para remover.');
+                    }
+                } catch (error) {
+                    this.showErrorMessage('Erro ao remover o template.');
+                }
+            }
+
+            getAllVouchers() {
+                const vouchers = localStorage.getItem('vouchers');
+                return vouchers ? JSON.parse(vouchers).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
+            }
+
+            saveVoucher() {
+                const voucherData = this.getVoucherFormData();
+                if (!this.validateVoucherData(voucherData)) return;
+                this.saveAutocompleteData(voucherData);
+                const vouchers = this.getAllVouchers();
+                if (this.editingVoucherId) {
+                    const index = vouchers.findIndex(v => v.id === this.editingVoucherId);
+                    if (index !== -1) {
+                        vouchers[index] = { ...vouchers[index], ...voucherData, updatedAt: new Date().toISOString() };
+                    }
+                } else {
+                    voucherData.id = this.generateId();
+                    voucherData.createdAt = new Date().toISOString();
+                    vouchers.push(voucherData);
+                }
+                localStorage.setItem('vouchers', JSON.stringify(vouchers));
+                this.showSuccessMessage('Voucher salvo com sucesso!');
+                setTimeout(() => this.showVouchersListScreen(), 1500);
+            }
+
+            getVoucherFormData() {
+                const destinations = Array.from(document.querySelectorAll('.destination-row')).map(row => ({
+                    destination: row.querySelector('input[name="destination"]').value,
+                    date: this.formatDateDDMMYY(row.querySelector('input[name="date"]').value),
+                    time: row.querySelector('input[name="time"]').value
+                })).filter(d => d.destination);
+                const passengers = Array.from(document.querySelectorAll('.passenger-row input[name="passenger"]')).map(input => input.value).filter(p => p);
+                return {
+                    selectedAgency: document.getElementById('selected-agency').value,
+                    selectedTemplate: document.getElementById('selected-template').value,
+                    destinations,
+                    local_embarque: document.getElementById('local_embarque').value,
+                    passengers,
+                    contato_01: this.getCombinedPhoneNumber('contato_01'),
+                    contato_02: this.getCombinedPhoneNumber('contato_02'),
+                    qt_adulto: parseInt(document.getElementById('qt_adulto').value) || 0,
+                    qt_crianca: parseInt(document.getElementById('qt_crianca').value) || 0,
+                    qt_colo: parseInt(document.getElementById('qt_colo').value) || 0,
+                    total_passageiros: parseInt(document.getElementById('total_passageiros').value) || 0,
+                    total_a_pagar: parseFloat(document.getElementById('total_a_pagar').value) || 0,
+                    pre_reserva: parseFloat(document.getElementById('pre_reserva').value) || 0,
+                    falta_pagar: parseFloat(document.getElementById('falta_pagar').value) || 0,
+                    observacao: document.getElementById('observacao').value,
+                    data_contrato: this.formatDateDDMMYY(document.getElementById('data_contrato').value),
+                    nome_contratante: document.getElementById('nome_contratante').value,
+                    contato_contratante: this.getCombinedPhoneNumber('contato_contratante'),
+                    email_contratante: document.getElementById('email_contratante').value,
+                    includeContractorDate: document.getElementById('include-contractor-date').checked,
+                    includeContractorName: document.getElementById('include-contractor-name').checked,
+                    includeContractorEmail: document.getElementById('include-contractor-email').checked,
+                    includeContractorContact: document.getElementById('include-contractor-contact').checked
                 };
             }
 
-            toggleVoice() {
-                const btn = document.getElementById('mic-trigger-btn');
-                try {
-                    this.recognition.start();
-                    btn.classList.add('recording');
-                    document.getElementById('voice-status').innerText = "Ouvindo... pode falar!";
-                } catch(e) { 
-                    this.recognition.stop();
-                    btn.classList.remove('recording');
+            validateVoucherData(data) {
+                if (!data.selectedAgency) return this.showErrorMessage('Selecione uma agência!');
+                if (!data.selectedTemplate) return this.showErrorMessage('Selecione um template!');
+                if (data.destinations.length === 0) return this.showErrorMessage('Pelo menos um destino deve ser informado!');
+                return true;
+            }
+
+            loadVoucherForEdit(voucherId) {
+                const voucher = this.getAllVouchers().find(v => String(v.id) === String(voucherId));
+                if (!voucher) {
+                    this.showErrorMessage('Voucher não encontrado.');
+                    return;
+                }
+                this._populateFormWithData(voucher);
+            }
+
+            _populateFormWithData(voucher) {
+                if (voucher.selectedAgency) {
+                    document.getElementById('selected-agency').value = voucher.selectedAgency;
+                    this.loadTemplatesForAgency(voucher.selectedAgency);
+                    setTimeout(() => {
+                        if (voucher.selectedTemplate) {
+                            document.getElementById('selected-template').value = voucher.selectedTemplate;
+                            this.selectTemplate(voucher.selectedTemplate);
+                        }
+                    }, 100);
+                }
+                this.clearDestinations();
+                (voucher.destinations || []).forEach(d => this.addDestination(d));
+                if (document.querySelectorAll('.destination-row').length === 0) this.addDestination();
+                this.clearPassengers();
+                (voucher.passengers || []).forEach(p => this.addPassenger(p));
+                if (document.querySelectorAll('.passenger-row').length === 0) this.addPassenger();
+                document.getElementById('local_embarque').value = voucher.local_embarque || '';
+                document.getElementById('qt_adulto').value = voucher.qt_adulto || 0;
+                document.getElementById('qt_crianca').value = voucher.qt_crianca || 0;
+                document.getElementById('qt_colo').value = voucher.qt_colo || 0;
+                document.getElementById('total_a_pagar').value = voucher.total_a_pagar || 0;
+                document.getElementById('pre_reserva').value = voucher.pre_reserva || 0;
+                document.getElementById('observacao').value = voucher.observacao || '';
+                document.getElementById('data_contrato').value = this.convertDateToISO(voucher.data_contrato) || '';
+                document.getElementById('nome_contratante').value = voucher.nome_contratante || '';
+                document.getElementById('email_contratante').value = voucher.email_contratante || '';
+                document.getElementById('include-contractor-date').checked = voucher.includeContractorDate !== false;
+                document.getElementById('include-contractor-name').checked = voucher.includeContractorName !== false;
+                document.getElementById('include-contractor-email').checked = voucher.includeContractorEmail !== false;
+                document.getElementById('include-contractor-contact').checked = voucher.includeContractorContact !== false;
+                this.addPassengerPhones();
+                setTimeout(() => {
+                    this.populatePhoneField('contato_01', voucher.contato_01);
+                    this.populatePhoneField('contato_02', voucher.contato_02);
+                    this.populatePhoneField('contato_contratante', voucher.contato_contratante);
+                }, 0);
+                if (voucher.nome_contratante) {
+                    const contractorFields = document.getElementById('contractor-fields');
+                    if (!contractorFields.classList.contains('show')) {
+                        this.toggleContractorFields();
+                    }
+                }
+                this.calculateTotalPassengers();
+                this.calculateRemainingAmount();
+            }
+
+            duplicateVoucher(voucherId) {
+                const voucherToDuplicate = this.getAllVouchers().find(v => String(v.id) === String(voucherId));
+                if (!voucherToDuplicate) return this.showErrorMessage('Voucher não encontrado para duplicação.');
+                const duplicatedVoucherData = JSON.parse(JSON.stringify(voucherToDuplicate));
+                this.editingVoucherId = null;
+                this.showVoucherFormScreen();
+                setTimeout(() => {
+                    document.getElementById('voucher-form-title').innerHTML = `<i class="fas fa-copy"></i> Duplicando Voucher`;
+                    this._populateFormWithData(duplicatedVoucherData);
+                }, 100);
+            }
+
+            deleteVoucher(voucherId) {
+                if (!voucherId) return this.showErrorMessage('ID do voucher não encontrado!');
+                if (confirm('Tem certeza que deseja excluir este voucher?')) {
+                    const vouchers = this.getAllVouchers();
+                    const filteredVouchers = vouchers.filter(v => String(v.id) !== String(voucherId));
+                    if (filteredVouchers.length === vouchers.length) return this.showErrorMessage('Voucher não encontrado para exclusão!');
+                    localStorage.setItem('vouchers', JSON.stringify(filteredVouchers));
+                    this.loadVouchersList();
+                    this.showSuccessMessage('Voucher excluído com sucesso!');
                 }
             }
 
-            // MODAL E REFINAMENTO
-            openAIModal() {
-                const modal = document.getElementById('ai-assistant-modal');
-                const d = this.currentAIData.dados;
-                modal.style.display = 'flex';
-                document.getElementById('ai-message').innerText = this.currentAIData.mensagem_assistente || "Confira os dados extraídos:";
-                document.getElementById('ai-data-summary').innerHTML = `
-                    <b>Contratante:</b> ${d.nome_contratante}<br>
-                    <b>Destinos:</b> ${d.destinos.length} encontrados<br>
-                    <b>Passageiros:</b> ${d.qt_adulto} Adul, ${d.qt_crianca} Crian<br>
-                    <b>Total:</b> R$ ${d.total_a_pagar}
-                `;
+            resetVoucherForm() {
+                document.getElementById('voucher-form').reset();
+                const today = new Date();
+                const todayISO = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+                document.getElementById('data_contrato').value = todayISO;
+                this.clearDestinations();
+                this.clearPassengers();
+                this.addDestination();
+                this.addPassenger();
+                this.addPassengerPhones();
+                this.calculateTotalPassengers();
+                this.calculateRemainingAmount();
+                const contractorFields = document.getElementById('contractor-fields');
+                if (contractorFields.classList.contains('show')) {
+                    this.toggleContractorFields();
+                }
+                document.getElementById('include-contractor-date').checked = true;
+                document.getElementById('include-contractor-name').checked = true;
+                document.getElementById('include-contractor-email').checked = true;
+                document.getElementById('include-contractor-contact').checked = true;
+                this.populatePhoneField('contato_contratante', '+55 ');
             }
 
-            closeAIModal() { document.getElementById('ai-assistant-modal').style.display = 'none'; }
+            addDestination(dest = {}) {
+                const container = document.getElementById('destinations-container');
+                if (container.children.length >= 7) return this.showErrorMessage("O limite de 7 destinos foi atingido.");
+                const row = document.createElement('div');
+                row.className = 'destination-row';
+                row.innerHTML = `
+                <div class="form-group"><input type="text" name="destination" class="form-input autocomplete-input" data-field="destination" value="${dest.destination || ''}" placeholder="Destino"></div>
+                <div class="form-group"><input type="date" name="date" class="form-input" value="${this.convertDateToISO(dest.date) || ''}" placeholder="Data"></div>
+                <div class="form-group"><input type="time" name="time" class="form-input" value="${dest.time || ''}" placeholder="Horário"></div>
+                <button type="button" class="remove-destination-btn" title="Remover"><i class="fas fa-trash"></i></button>`;
+                container.appendChild(row);
+                row.querySelector('.remove-destination-btn').addEventListener('click', () => {
+                    if (container.children.length > 1) row.remove();
+                });
+                this.setupAutocompleteForField(row.querySelector('.autocomplete-input'));
+            }
 
-            approveAIData() {
-                const d = this.currentAIData.dados;
-                document.getElementById('nome_contratante').value = d.nome_contratante;
-                document.getElementById('email_contratante').value = d.email_contratante;
-                document.getElementById('qt_adulto').value = d.qt_adulto;
-                document.getElementById('qt_crianca').value = d.qt_crianca;
-                document.getElementById('qt_colo').value = d.qt_colo;
-                document.getElementById('total_a_pagar').value = d.total_a_pagar;
+            clearDestinations() { document.getElementById('destinations-container').innerHTML = ''; }
+
+            addPassenger(name = '') {
+                const container = document.getElementById('passengers-container');
+                if (container.children.length >= 10) return this.showErrorMessage("O limite de 10 passageiros foi atingido.");
+                const count = container.children.length + 1;
+                const row = document.createElement('div');
+                row.className = 'passenger-row';
+                row.innerHTML = `<label>PAX ${count}</label><input type="text" name="passenger" class="form-input autocomplete-input" data-field="passenger" value="${name || ''}"><button type="button" class="btn btn-danger btn-sm remove-passenger-btn" title="Remover passageiro"><i class="fas fa-trash"></i></button>`;
+                container.appendChild(row);
+                this.setupAutocompleteForField(row.querySelector('.autocomplete-input'));
+                const removeBtn = row.querySelector('.remove-passenger-btn');
+                removeBtn.addEventListener('click', () => this.removePassenger(row));
+            }
+
+            removePassenger(passengerRow) {
+                const container = document.getElementById('passengers-container');
+                if (container.children.length > 1) {
+                    passengerRow.remove();
+                    this.updatePassengerLabels();
+                } else {
+                    this.showErrorMessage('É necessário manter pelo menos um passageiro.');
+                }
+            }
+
+            clearPassengers() { document.getElementById('passengers-container').innerHTML = ''; }
+
+            updatePassengerLabels() {
+                const container = document.getElementById('passengers-container');
+                const passengerRows = container.querySelectorAll('.passenger-row');
+                passengerRows.forEach((row, index) => {
+                    const label = row.querySelector('label');
+                    label.textContent = `PAX ${index + 1}`;
+                });
+            }
+
+            addPassengerPhones() {
+                const container = document.querySelector('.passenger-phones-container');
+                container.innerHTML = '';
+                for (let i = 1; i <= 2; i++) {
+                    const unit = document.createElement('div');
+                    unit.className = 'passenger-phone-unit';
+                    unit.innerHTML = `<label for="contato_0${i}">Contato Passageiro ${i}</label><div class="phone-input-group"><input type="tel" id="contato_0${i}" class="form-input phone-input" value=""></div>`;
+                    container.appendChild(unit);
+                }
+                this.populateCountrySelectors();
+            }
+
+            calculateTotalPassengers() {
+                const adults = parseInt(document.getElementById('qt_adulto').value) || 0;
+                const children = parseInt(document.getElementById('qt_crianca').value) || 0;
+                const infants = parseInt(document.getElementById('qt_colo').value) || 0;
+                document.getElementById('total_passageiros').value = adults + children + infants;
+            }
+
+            calculateRemainingAmount() {
+                const total = parseFloat(document.getElementById('total_a_pagar').value) || 0;
+                const preBooking = parseFloat(document.getElementById('pre_reserva').value) || 0;
+                document.getElementById('falta_pagar').value = (total - preBooking).toFixed(2);
+            }
+
+            setupFormCalculations() {
+                document.querySelectorAll('.passenger-count').forEach(input => input.addEventListener('input', () => this.calculateTotalPassengers()));
+                document.querySelectorAll('.money-input').forEach(input => input.addEventListener('input', () => this.calculateRemainingAmount()));
+            }
+
+            setupAutocomplete() {
+                document.querySelectorAll('.autocomplete-input').forEach(input => this.setupAutocompleteForField(input));
+            }
+
+            setupAutocompleteForField(input) {
+                const field = input.dataset.field;
+                input.addEventListener('input', (e) => this.showAutocompleteSuggestions(e.target, field));
+                input.addEventListener('blur', () => setTimeout(() => this.hideAutocompleteSuggestions(), 200));
+            }
+
+            showAutocompleteSuggestions(input, field) {
+                const value = input.value.toLowerCase();
+                const suggestions = (this.autocompleteData[field] || []).filter(s => s.toLowerCase().includes(value)).slice(0, 5);
+                if (value.length < 2 || suggestions.length === 0) {
+                    this.hideAutocompleteSuggestions();
+                    return;
+                }
+                this.displayAutocompleteSuggestions(input, suggestions);
+            }
+
+            displayAutocompleteSuggestions(input, suggestions) {
+                const container = document.getElementById('autocomplete-suggestions');
                 
-                // Preenche Destinos Dinamicamente
-                const destCont = document.getElementById('destinations-container');
-                destCont.innerHTML = '';
-                d.destinos.forEach(dest => this.addDestination(dest));
-
-                // Preenche Passageiros Dinamicamente
-                const paxCont = document.getElementById('passengers-container');
-                paxCont.innerHTML = '';
-                if(d.passengers) d.passengers.forEach(p => this.addPassenger(p));
-
-                this.closeAIModal();
+                requestAnimationFrame(() => {
+                    const rect = input.getBoundingClientRect();
+                    container.style.left = `${rect.left}px`;
+                    container.style.top = `${rect.bottom + window.scrollY}px`;
+                    container.style.width = `${rect.width}px`;
+                    container.style.display = 'block';
+                    container.innerHTML = suggestions.map(s => `<div class="autocomplete-suggestion">${s}</div>`).join('');
+                    container.querySelectorAll('.autocomplete-suggestion').forEach(suggestion => {
+                        suggestion.addEventListener('click', () => {
+                            input.value = suggestion.textContent;
+                            this.hideAutocompleteSuggestions();
+                            input.focus();
+                        });
+                    });
+                });
             }
 
-            // FUNÇÕES ORIGINAIS DO SEU SISTEMA (MANTEIDAS)
-            addDestination(data = {}) {
-                const div = document.createElement('div');
-                div.className = 'destination-row';
-                div.innerHTML = `
-                    <input type="text" placeholder="Destino" class="form-input" value="${data.destination || ''}">
-                    <input type="date" class="form-input" value="${this.formatISO(data.date)}">
-                    <input type="time" class="form-input" value="${data.time || ''}">
-                    <button type="button" onclick="this.parentElement.remove()" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                `;
-                document.getElementById('destinations-container').appendChild(div);
+            hideAutocompleteSuggestions() {
+                document.getElementById('autocomplete-suggestions').style.display = 'none';
             }
 
-            addPassenger(name = "") {
-                const div = document.createElement('div');
-                div.className = 'passenger-row';
-                div.innerHTML = `
-                    <label>PAX</label>
-                    <input type="text" class="form-input" value="${name}">
-                    <button type="button" onclick="this.parentElement.remove()" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                `;
-                document.getElementById('passengers-container').appendChild(div);
+            saveAutocompleteData(voucherData) {
+                (voucherData.destinations || []).forEach(d => this.addToAutocomplete('destination', d.destination));
+                this.addToAutocomplete('local_embarque', voucherData.local_embarque);
+                (voucherData.passengers || []).forEach(p => this.addToAutocomplete('passenger', p));
+                this.addToAutocomplete('nome_contratante', voucherData.nome_contratante);
+                this.addToAutocomplete('email_contratante', voucherData.email_contratante);
+                localStorage.setItem('autocompleteData', JSON.stringify(this.autocompleteData));
             }
 
-            toBase64 = file => new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.readAsDataURL(file);
-            });
-
-            formatISO(dateStr) {
-                if(!dateStr) return "";
-                const [d,m,y] = dateStr.split('/');
-                return y ? `${y}-${m}-${d}` : dateStr;
+            addToAutocomplete(field, value) {
+                if (!value) return;
+                if (!this.autocompleteData[field]) this.autocompleteData[field] = [];
+                if (!this.autocompleteData[field].includes(value)) {
+                    this.autocompleteData[field].push(value);
+                    if (this.autocompleteData[field].length > 50) {
+                        this.autocompleteData[field] = this.autocompleteData[field].slice(-50);
+                    }
+                }
             }
+
+            loadAutocompleteData() {
+                const data = localStorage.getItem('autocompleteData');
+                return data ? JSON.parse(data) : {};
+            }
+
+            async generatePDF() {
+                try {
+                    const voucherData = this.getVoucherFormData();
+                    if (!this.validateVoucherData(voucherData)) return;
+                    await this.createPDF(voucherData);
+                } catch (error) {
+                    this.showErrorMessage('Erro ao gerar PDF: ' + error.message);
+                }
+            }
+
+            async generatePDFFromVoucher(voucherId) {
+                const voucher = this.getAllVouchers().find(v => v.id === voucherId);
+                if (voucher) {
+                    await this.createPDF(voucher);
+                }
+            }
+
+            async createPDF(voucherData) {
+                if (typeof PDFLib === 'undefined') return this.showErrorMessage('Biblioteca PDF não carregada.');
+                try {
+                    const templateBytes = await this.loadSelectedTemplate(voucherData.selectedTemplate);
+                    if (!templateBytes) return this.showErrorMessage('Template PDF não encontrado.');
+                    const { PDFDocument } = PDFLib;
+                    const pdfDoc = await PDFDocument.load(templateBytes);
+                    const form = pdfDoc.getForm();
+                    this.fillPDFFields(form, voucherData);
+                    form.flatten();
+                    const pdfBytes = await pdfDoc.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const safeName = (voucherData.nome_contratante || 'voucher').replace(/[^a-zA-Z0-9]/g, '_');
+                    const fileName = `voucher_${safeName}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                    this.showSuccessMessage('PDF baixado com sucesso!');
+                } catch (error) {
+                    this.showErrorMessage('Erro ao criar o PDF.');
+                }
+            }
+
+            fillPDFFields(form, voucherData) {
+                const setField = (fieldName, value) => {
+                    try {
+                        if (value !== undefined && value !== null && String(value).trim() !== '') {
+                            const field = form.getField(fieldName);
+                            field.setText(String(value));
+                        }
+                    } catch (e) { }
+                };
+                (voucherData.destinations || []).forEach((dest, i) => {
+                    if (i >= 7) return;
+                    const num = String(i + 1).padStart(2, '0');
+                    setField(`destino_${num}`, dest.destination);
+                    setField(`data_${num}`, dest.date);
+                    setField(`horario_${num}`, dest.time);
+                });
+                (voucherData.passengers || []).forEach((p, i) => {
+                    if (i >= 10) return;
+                    const num = String(i + 1).padStart(2, '0');
+                    setField(`passageiro_${num}`, p);
+                });
+                setField('local_embarque', voucherData.local_embarque);
+                setField('observacao', voucherData.observacao);
+                setField('qt_adulto', voucherData.qt_adulto);
+                setField('qt_crianca', voucherData.qt_crianca);
+                setField('qt_colo', voucherData.qt_colo);
+                setField('total_passageiros', voucherData.total_passageiros);
+                setField('contato_01', voucherData.contato_01);
+                setField('contato_02', voucherData.contato_02);
+                setField('total_a_pagar', `R$ ${parseFloat(voucherData.total_a_pagar || 0).toFixed(2)}`);
+                setField('pre_reserva', `R$ ${parseFloat(voucherData.pre_reserva || 0).toFixed(2)}`);
+                setField('falta_pagar', `R$ ${parseFloat(voucherData.falta_pagar || 0).toFixed(2)}`);
+                if (voucherData.includeContractorDate) setField('data_contrato', `Data do Contrato: ${voucherData.data_contrato}`);
+                if (voucherData.includeContractorName) setField('nome_contratante', `Contratante: ${voucherData.nome_contratante}`);
+                if (voucherData.includeContractorEmail) setField('email_contratante', `E-mail: ${voucherData.email_contratante}`);
+                if (voucherData.includeContractorContact) setField('contato_contratante', `Contato: ${voucherData.contato_contratante}`);
+            }
+
+            async loadSelectedTemplate(templateId) {
+                if (!templateId) return null;
+                try {
+                    const [agencyId, templateIndex] = templateId.split('-');
+                    const agencies = this.getAllAgencies();
+                    const agency = agencies.find(a => a.id === agencyId);
+                    if (agency && agency.templates && agency.templates[templateIndex]) {
+                        const base64String = agency.templates[templateIndex].data;
+                        if (base64String) return this.base64ToUint8Array(base64String);
+                    }
+                    return null;
+                } catch (error) { return null; }
+            }
+
+            async handlePDFTemplateUpload(e) {
+                const file = e.target.files[0];
+                const statusDiv = document.getElementById('pdf-template-status');
+                if (file && file.type === 'application/pdf') {
+                    statusDiv.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Carregando...`;
+                    statusDiv.className = 'template-status loading';
+                    setTimeout(() => {
+                        statusDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${file.name} pronto para salvar.`;
+                        statusDiv.className = 'template-status success';
+                    }, 500);
+                } else {
+                    statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Selecione um PDF válido.';
+                    statusDiv.className = 'template-status error';
+                }
+            }
+
+            arrayBufferToBase64(buffer) {
+                let binary = '';
+                const bytes = new Uint8Array(buffer);
+                for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+                return window.btoa(binary);
+            }
+
+            base64ToUint8Array(base64) {
+                const binary_string = window.atob(base64);
+                const len = binary_string.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) bytes[i] = binary_string.charCodeAt(i);
+                return bytes;
+            }
+
+            generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+
+            formatDateTimeDDMMYY(isoString) {
+                if (!isoString) return '';
+                try {
+                    const date = new Date(isoString);
+                    if (isNaN(date.getTime())) return isoString;
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${day}/${month}/${year} às ${hours}:${minutes}`;
+                } catch { return isoString; }
+            }
+
+            formatDateDDMMYY(dateString) {
+                if (!dateString || !dateString.includes('-')) return dateString || '';
+                try {
+                    const date = new Date(dateString + 'T00:00:00');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                } catch { return dateString; }
+            }
+
+            convertDateToISO(dateString) {
+                if (!dateString) return '';
+                if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) return dateString;
+                if (dateString.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                    const [day, month, year] = dateString.split('/');
+                    return `${year}-${month}-${day}`;
+                }
+                return '';
+            }
+
+            loadVouchersList() {
+                const vouchers = this.getAllVouchers();
+                const container = document.getElementById('vouchers-list');
+                const emptyState = document.getElementById('empty-state');
+                if (vouchers.length === 0) {
+                    container.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                container.style.display = 'block';
+                emptyState.style.display = 'none';
+                container.innerHTML = vouchers.map(v => this.createVoucherListItem(v)).join('');
+                container.querySelectorAll('.edit-voucher-btn').forEach(btn => btn.addEventListener('click', (e) => this.showVoucherFormScreen(e.currentTarget.closest('.voucher-item').dataset.voucherId)));
+                container.querySelectorAll('.delete-voucher-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.deleteVoucher(e.currentTarget.closest('.voucher-item').dataset.voucherId);
+                }));
+                container.querySelectorAll('.generate-pdf-btn').forEach(btn => btn.addEventListener('click', (e) => this.generatePDFFromVoucher(e.currentTarget.closest('.voucher-item').dataset.voucherId)));
+                container.querySelectorAll('.duplicate-voucher-btn').forEach(btn => btn.addEventListener('click', (e) => this.duplicateVoucher(e.currentTarget.closest('.voucher-item').dataset.voucherId)));
+            }
+
+            createVoucherListItem(voucher) {
+                const destinations = (voucher.destinations || []).map(d => d.destination).join(', ') || 'N/A';
+                const totalPassengers = voucher.total_passageiros || 0;
+                return `
+                <div class="voucher-item" data-voucher-id="${voucher.id}">
+                    <div class="voucher-header">
+                        <div><div class="voucher-title">${voucher.nome_contratante}</div><div class="voucher-date">Criado em ${this.formatDateTimeDDMMYY(voucher.createdAt)}</div></div>
+                        <div class="voucher-actions">
+                            <button class="btn btn-secondary edit-voucher-btn"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn-info duplicate-voucher-btn"><i class="fas fa-copy"></i> Duplicar</button>
+                            <button class="btn btn-success generate-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+                            <button class="btn btn-danger delete-voucher-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="voucher-info">
+                        <div class="voucher-info-item"><div class="voucher-info-label">Destinos</div><div class="voucher-info-value">${destinations}</div></div>
+                        <div class="voucher-info-item"><div class="voucher-info-label">Passageiros</div><div class="voucher-info-value">${totalPassengers}</div></div>
+                        <div class="voucher-info-item"><div class="voucher-info-label">Total</div><div class="voucher-info-value">R$ ${(voucher.total_a_pagar || 0).toFixed(2)}</div></div>
+                        <div class="voucher-info-item"><div class="voucher-info-label">Falta Pagar</div><div class="voucher-info-value">R$ ${(voucher.falta_pagar || 0).toFixed(2)}</div></div>
+                    </div>
+                </div>`;
+            }
+
+            showMessage(message, type = 'success') {
+                const el = document.createElement('div');
+                el.className = `message message-${type}`;
+                el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+                document.body.appendChild(el);
+                setTimeout(() => {
+                    el.style.animation = 'slideOutRight 0.5s ease-in';
+                    setTimeout(() => el.remove(), 500);
+                }, 3000);
+            }
+            showSuccessMessage(message) { this.showMessage(message, 'success'); }
+            showErrorMessage(message) { this.showMessage(message, 'error'); return false; }
         }
 
-        const system = new VoucherSystem();
-
-        // LISTENERS DE TELA
-        document.getElementById('new-voucher-btn').onclick = () => {
-            document.getElementById('vouchers-list-screen').style.display = 'none';
-            document.getElementById('voucher-form-screen').style.display = 'block';
-        };
-        document.getElementById('back-to-list-btn').onclick = () => location.reload();
+        document.addEventListener('DOMContentLoaded', () => {
+            const voucherSystem = new VoucherSystem();
+        });
     </script>
 </body>
 </html>
